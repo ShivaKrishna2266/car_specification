@@ -14,5 +14,5 @@ public interface FeedbackService {
 
     FeedbackDTO updateFeedback(Integer feedbackId, FeedbackDTO feedbackDTO);
 
-    FeedbackDTO deleteFeedbackById(Integer feedbackId);
+    void deleteFeedbackById(Integer feedbackId);
 }
