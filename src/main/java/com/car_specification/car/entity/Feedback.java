@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "feedback")
@@ -25,16 +25,16 @@ public class Feedback {
     private  String description;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Timestamp updatedAt;
 
     @Column(name = "created_by")
-    private LocalDateTime createdBy;
+    private String createdBy;
 
     @Column(name = "updated_by")
-    private LocalDateTime updatedBy;
+    private String updatedBy;
 
     @ManyToOne
     @JoinColumn(name = "car_brand_id")

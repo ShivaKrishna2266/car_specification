@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,4 +16,8 @@ public class FeedbackDTO {
     private Integer carBrandId;
     private Integer carModelId;
     private Integer userId;
+    private String createdBy;
+    private String updatedBy;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 }
