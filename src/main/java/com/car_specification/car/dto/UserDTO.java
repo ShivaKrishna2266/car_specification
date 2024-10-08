@@ -1,5 +1,6 @@
 package com.car_specification.car.dto;
 
+import com.car_specification.car.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,4 +15,7 @@ public class UserDTO {
     private String password;
     private String mobile;
     private Integer roleId;
+
+    public UserDTO(User savedUser) {
+    }
 }
