@@ -41,7 +41,7 @@ public class CarBrandServiceImpl implements CarBrandService {
     }
 
     @Override
-    public CarBrandDTO deleteCarBrandById(Integer brandId) {
+    public Void deleteCarBrandById(Integer brandId) {
         return null;
     }
 }

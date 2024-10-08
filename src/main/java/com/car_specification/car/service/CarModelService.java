@@ -14,5 +14,5 @@ public interface CarModelService {
 
     CarModelDTO updateCarModel(Integer modelId, CarModelDTO carModelDTO);
 
-    CarModelDTO deleteCarModelById(Integer modelId);
+    Void deleteCarModelById(Integer modelId);
 }

@@ -79,7 +79,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public AppointmentDTO deleteAppointmentById(Integer appointmentId) {
+    public Void deleteAppointmentById(Integer appointmentId) {
+        if (appointmentRepository.existsById(appointmentId))
+            appointmentRepository.deleteById(appointmentId);
         return null;
     }
 }
