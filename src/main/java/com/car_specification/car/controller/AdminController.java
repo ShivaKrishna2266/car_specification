@@ -1,11 +1,14 @@
 package com.car_specification.car.controller;
 
 import com.car_specification.car.dto.AppointmentDTO;
+import com.car_specification.car.dto.CarColourDTO;
 import com.car_specification.car.dto.CarModelDTO;
 import com.car_specification.car.dto.FeedbackDTO;
 import com.car_specification.car.entity.ApiResponse;
+import com.car_specification.car.entity.CarColour;
 import com.car_specification.car.exception.ApplicationBusinessException;
 import com.car_specification.car.service.AppointmentService;
+import com.car_specification.car.service.CarColourService;
 import com.car_specification.car.service.CarModelService;
 import com.car_specification.car.service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,10 @@ public class AdminController {
 
     @Autowired
     private FeedbackService feedbackService;
+    @Autowired
+    private CarColourService carColourService;
+
+    //    ================================CarModels==================================
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAllCarModels")
@@ -120,6 +127,7 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    //    ================================Appointments==================================
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAllAppointments")
     public ResponseEntity<ApiResponse<List<AppointmentDTO>>> getAllAppointments() {
@@ -263,22 +271,22 @@ public class AdminController {
 
     @PutMapping("/updateFeedback/{feedBackId}")
     public ResponseEntity<ApiResponse<FeedbackDTO>> updateFeedback(@PathVariable Integer feedBackId,
-                                                                   @RequestBody FeedbackDTO feedbackDTO){
+                                                                   @RequestBody FeedbackDTO feedbackDTO) {
         ApiResponse<FeedbackDTO> response = new ApiResponse<>();
-        FeedbackDTO feedbackDTO1 = feedbackService.updateFeedback(feedBackId,feedbackDTO);
-        if(feedbackDTO1 != null){
+        FeedbackDTO feedbackDTO1 = feedbackService.updateFeedback(feedBackId, feedbackDTO);
+        if (feedbackDTO1 != null) {
             response.setStatus(200);
             response.setMessage("Update a FeedBack successfully!");
             response.setData(feedbackDTO1);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        }else {
+        } else {
             response.setStatus(500);
             response.setMessage("Failed to update a FeedBack!");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-//    @DeleteMapping("/deleteFeedback/{feedBackId}")
+    //    @DeleteMapping("/deleteFeedback/{feedBackId}")
 //    public ResponseEntity<ApiResponse<FeedbackDTO>> deleteFeedback(@PathVariable Integer feedBackId){
 //        ApiResponse<FeedbackDTO> response = new ApiResponse<>();
 //        FeedbackDTO feedbackDTO1 = feedbackService.deleteFeedbackById(feedBackId);
@@ -293,7 +301,97 @@ public class AdminController {
 //            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 //        }
 //    }
+//    ================================CarColour==================================
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/getAllCarColours")
+    public ResponseEntity<ApiResponse<List<CarColourDTO>>> getAllCarColours() {
+        ApiResponse<List<CarColourDTO>> response = new ApiResponse<>();
+        try {
+            List<CarColourDTO> carColourDTOS = carColourService.getAllColours();
+            if (carColourDTOS != null) {
+                response.setStatus(200);
+                response.setMessage("Fetched all carColours successfully!");
+                response.setData(carColourDTOS);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to fetch all carColours!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to fetch carColours!" + ae.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/addCarColour")
+    public ResponseEntity<ApiResponse<CarColourDTO>> addCarColour(@RequestBody CarColourDTO carColourDTO) {
+        ApiResponse<CarColourDTO> response = new ApiResponse<>();
+        try {
+            CarColourDTO addCarColourDTO = carColourService.createColour(carColourDTO);
+            if (addCarColourDTO != null) {
+                response.setStatus(200);
+                response.setMessage("Successfully added a carColour!");
+                response.setData(addCarColourDTO);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to add a carColour!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to add a carColour!" + ae.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/updateCarColour/{carColourId}")
+    public ResponseEntity<ApiResponse<CarColourDTO>> updateCarColour(@PathVariable Integer carColourId, @RequestBody CarColourDTO carColourDTO) {
+        ApiResponse<CarColourDTO> response = new ApiResponse<>();
+        try {
+            CarColourDTO updateCarColourDTO = carColourService.updateColour(carColourId, carColourDTO);
+            if (updateCarColourDTO != null) {
+                response.setStatus(200);
+                response.setMessage("Successfully updated a carColour!");
+                response.setData(updateCarColourDTO);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to update a carColour!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to update a carColour!" + ae.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/deleteCarColour/{carColourId}")
+    public ResponseEntity<ApiResponse<Void>> deleteCarColour(@PathVariable Integer carColourId) {
+        ApiResponse<Void> response = new ApiResponse<>();
+        try {
+            carColourService.deleteColour(carColourId);
+            if (carColourId != null) {
+                response.setStatus(200);
+                response.setMessage("Successfully deleted a carColor!");
+                response.setData(null);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to delete a carColor!");
+                response.setData(null);
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to delete a carColor!" + ae.getMessage());
+            response.setData(null);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
 

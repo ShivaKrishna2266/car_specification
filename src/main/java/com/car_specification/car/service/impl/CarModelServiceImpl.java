@@ -32,7 +32,7 @@ public class CarModelServiceImpl implements CarModelService {
     @Override
     public CarModelDTO getCarModelById(Integer modelId) {
         Optional<CarModel> optionalCarModel = carModelRepository.findById(modelId);
-        if(optionalCarModel.isPresent()) {
+        if (optionalCarModel.isPresent()) {
             CarModel carModel = optionalCarModel.get();
             return CarModelMapper.convertToDTO(carModel);
         } else {
@@ -65,7 +65,7 @@ public class CarModelServiceImpl implements CarModelService {
     @Override
     public CarModelDTO updateCarModel(Integer modelId, CarModelDTO carModelDTO) {
         Optional<CarModel> optionalCarModel = carModelRepository.findById(modelId);
-        if(optionalCarModel.isPresent()) {
+        if (optionalCarModel.isPresent()) {
             CarModel carModel = optionalCarModel.get();
             carModel.setModelName(carModelDTO.getModelName());
             carModel.setPrice(carModelDTO.getPrice());
@@ -81,7 +81,7 @@ public class CarModelServiceImpl implements CarModelService {
 
     @Override
     public Void deleteCarModelById(Integer modelId) {
-        if(carModelRepository.existsById(modelId))
+        if (carModelRepository.existsById(modelId))
             carModelRepository.deleteById(modelId);
         return null;
     }

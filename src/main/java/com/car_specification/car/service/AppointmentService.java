@@ -1,6 +1,7 @@
 package com.car_specification.car.service;
 
 import com.car_specification.car.dto.AppointmentDTO;
+import com.car_specification.car.exception.ApplicationBusinessException;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ public interface AppointmentService {
 
     AppointmentDTO getAppointmentById(Integer appointmentId);
 
-    AppointmentDTO createAppointment(AppointmentDTO appointmentDTO);
+    AppointmentDTO createAppointment(AppointmentDTO appointmentDTO) throws ApplicationBusinessException;
 
     AppointmentDTO updateAppointment(Integer appointmentId, AppointmentDTO appointmentDTO);
 

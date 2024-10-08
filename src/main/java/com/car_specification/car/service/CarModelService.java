@@ -1,6 +1,7 @@
 package com.car_specification.car.service;
 
 import com.car_specification.car.dto.CarModelDTO;
+import com.car_specification.car.exception.ApplicationBusinessException;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public interface CarModelService {
 
     CarModelDTO getCarModelById(Integer modelId);
 
-    CarModelDTO createCarModel(CarModelDTO carModelDTO);
+    CarModelDTO createCarModel(CarModelDTO carModelDTO) throws ApplicationBusinessException;
 
     CarModelDTO updateCarModel(Integer modelId, CarModelDTO carModelDTO);
 
