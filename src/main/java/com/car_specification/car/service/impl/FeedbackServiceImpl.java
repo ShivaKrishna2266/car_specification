@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -56,8 +57,8 @@ public class FeedbackServiceImpl implements FeedbackService {
             Feedback convertToEntity = FeedbackMapper.convertToEntity(feedbackDTO);
             convertToEntity.setCreatedBy("System");
             convertToEntity.setUpdatedBy("System");
-            convertToEntity.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-            convertToEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+            convertToEntity.setCreatedAt(LocalDateTime.now());
+            convertToEntity.setUpdatedAt(LocalDateTime.now());
             feedbackRepository.save(convertToEntity);
             return feedbackDTO;
         }catch (Exception e){
@@ -74,8 +75,6 @@ public class FeedbackServiceImpl implements FeedbackService {
                 existingFeedBack.setRating(feedbackDTO.getRating());
                 existingFeedBack.setDescription(feedbackDTO.getDescription());
                 existingFeedBack.setFeedbackId(feedbackDTO.getFeedbackId());
-                existingFeedBack.setUpdatedBy(feedbackDTO.getUpdatedBy());
-                existingFeedBack.setUpdatedAt(feedbackDTO.getUpdatedAt());
                 CarModel carModel = carModelRepository.findById(feedbackDTO.getCarModelId()).orElse(null);
                 if(carModel != null){
                     existingFeedBack.setCarModel(carModel);

@@ -16,8 +16,4 @@ public class FeedbackDTO {
     private Integer carBrandId;
     private Integer carModelId;
     private Integer userId;
-    private String createdBy;
-    private String updatedBy;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
 }
