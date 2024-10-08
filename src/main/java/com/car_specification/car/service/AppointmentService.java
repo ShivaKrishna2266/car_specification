@@ -13,6 +13,6 @@ public interface AppointmentService {
 
     AppointmentDTO updateAppointment(Integer appointmentId, AppointmentDTO appointmentDTO);
 
-    AppointmentDTO deleteAppointmentById(Integer appointmentId);
+    Void deleteAppointmentById(Integer appointmentId);
 
 }

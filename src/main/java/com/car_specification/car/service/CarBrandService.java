@@ -14,7 +14,7 @@ public interface CarBrandService {
 
     CarBrandDTO updateCarBrand(Integer brandId, CarBrandDTO carBrandDTO);
 
-    CarBrandDTO deleteCarBrandById(Integer brandId);
+    Void deleteCarBrandById(Integer brandId);
 
 
 }

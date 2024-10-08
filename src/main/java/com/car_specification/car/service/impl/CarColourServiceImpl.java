@@ -28,7 +28,7 @@ public class CarColourServiceImpl implements CarColourService {
     }
 
     @Override
-    public CarColourDTO deleteColourById(Integer colourId) {
+    public Void deleteColourById(Integer colourId) {
         return null;
     }
 }

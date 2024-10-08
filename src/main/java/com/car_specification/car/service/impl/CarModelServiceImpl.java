@@ -80,7 +80,9 @@ public class CarModelServiceImpl implements CarModelService {
     }
 
     @Override
-    public CarModelDTO deleteCarModelById(Integer modelId) {
+    public Void deleteCarModelById(Integer modelId) {
+        if(carModelRepository.existsById(modelId))
+            carModelRepository.deleteById(modelId);
         return null;
     }
 }

@@ -14,5 +14,5 @@ public interface CarColourService {
 
     CarColourDTO updateColourById(Integer colourId, CarColourDTO carColourDTO);
 
-    CarColourDTO deleteColourById(Integer colourId);
+    Void deleteColourById(Integer colourId);
 }
