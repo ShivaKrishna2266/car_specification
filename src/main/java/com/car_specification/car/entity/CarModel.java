@@ -34,10 +34,10 @@ public class CarModel {
     private LocalDateTime updatedAt;
 
     @Column(name = "created_by")
-    private LocalDateTime createdBy;
+    private String createdBy;
 
     @Column(name = "updated_by")
-    private LocalDateTime updatedBy;
+    private String updatedBy;
 
     @ManyToOne
     @JoinColumn(name = "car_brand_id")
