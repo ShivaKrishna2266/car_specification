@@ -10,7 +10,7 @@ public interface AppointmentService {
 
     AppointmentDTO getAppointmentById(Integer appointmentId);
 
-    AppointmentDTO createAppointment(AppointmentDTO appointmentDTO) throws ApplicationBusinessException;
+    AppointmentDTO createAppointment(AppointmentDTO appointmentDTO);
 
     AppointmentDTO updateAppointment(Integer appointmentId, AppointmentDTO appointmentDTO);
 

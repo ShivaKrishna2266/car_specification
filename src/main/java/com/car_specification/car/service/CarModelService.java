@@ -11,7 +11,7 @@ public interface CarModelService {
 
     CarModelDTO getCarModelById(Integer modelId);
 
-    CarModelDTO createCarModel(CarModelDTO carModelDTO) throws ApplicationBusinessException;
+    CarModelDTO createCarModel(CarModelDTO carModelDTO);
 
     CarModelDTO updateCarModel(Integer modelId, CarModelDTO carModelDTO);
 
