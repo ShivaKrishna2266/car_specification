@@ -1,12 +1,15 @@
 package com.car_specification.car.controller;
 
 import com.car_specification.car.dto.AppointmentDTO;
+import com.car_specification.car.dto.CarColourDTO;
 import com.car_specification.car.dto.CarBrandDTO;
 import com.car_specification.car.dto.CarModelDTO;
 import com.car_specification.car.dto.FeedbackDTO;
 import com.car_specification.car.entity.ApiResponse;
+import com.car_specification.car.entity.CarColour;
 import com.car_specification.car.exception.ApplicationBusinessException;
 import com.car_specification.car.service.AppointmentService;
+import com.car_specification.car.service.CarColourService;
 import com.car_specification.car.service.CarBrandService;
 import com.car_specification.car.service.CarModelService;
 import com.car_specification.car.service.FeedbackService;
@@ -29,6 +32,10 @@ public class AdminController {
 
     @Autowired
     private FeedbackService feedbackService;
+    @Autowired
+    private CarColourService carColourService;
+
+    //    ================================CarModels==================================
 
     @Autowired
     private CarBrandService carBrandService;
@@ -125,6 +132,7 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    //    ================================Appointments==================================
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAllAppointments")
     public ResponseEntity<ApiResponse<List<AppointmentDTO>>> getAllAppointments() {
@@ -268,20 +276,36 @@ public class AdminController {
 
     @PutMapping("/updateFeedback/{feedBackId}")
     public ResponseEntity<ApiResponse<FeedbackDTO>> updateFeedback(@PathVariable Integer feedBackId,
-                                                                   @RequestBody FeedbackDTO feedbackDTO){
+                                                                   @RequestBody FeedbackDTO feedbackDTO) {
         ApiResponse<FeedbackDTO> response = new ApiResponse<>();
-        FeedbackDTO feedbackDTO1 = feedbackService.updateFeedback(feedBackId,feedbackDTO);
-        if(feedbackDTO1 != null){
+        FeedbackDTO feedbackDTO1 = feedbackService.updateFeedback(feedBackId, feedbackDTO);
+        if (feedbackDTO1 != null) {
             response.setStatus(200);
             response.setMessage("Update a FeedBack successfully!");
             response.setData(feedbackDTO1);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        }else {
+        } else {
             response.setStatus(500);
             response.setMessage("Failed to update a FeedBack!");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //    @DeleteMapping("/deleteFeedback/{feedBackId}")
+//    public ResponseEntity<ApiResponse<FeedbackDTO>> deleteFeedback(@PathVariable Integer feedBackId){
+//        ApiResponse<FeedbackDTO> response = new ApiResponse<>();
+//        FeedbackDTO feedbackDTO1 = feedbackService.deleteFeedbackById(feedBackId);
+//        if(feedbackDTO1 != null){
+//            response.setStatus(200);
+//            response.setMessage("Update a FeedBack successfully!");
+//            response.setData(feedbackDTO1);
+//            return new ResponseEntity<>(response, HttpStatus.OK);
+//        }else {
+//            response.setStatus(500);
+//            response.setMessage("Failed to update a FeedBack!");
+//            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
     @DeleteMapping("/deleteFeedBack/{feedBackId}")
     public ResponseEntity<ApiResponse<Void>> deleteFeedBack(@PathVariable Integer feedBackId) {

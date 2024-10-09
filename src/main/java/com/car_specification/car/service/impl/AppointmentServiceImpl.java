@@ -32,7 +32,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public AppointmentDTO getAppointmentById(Integer appointmentId) {
         Optional<Appointment> optionalAppointment = appointmentRepository.findById(appointmentId);
-        if(optionalAppointment.isPresent()) {
+        if (optionalAppointment.isPresent()) {
             Appointment appointment = optionalAppointment.get();
             return AppointmentMapper.convertToDTO(appointment);
         } else {
@@ -65,7 +65,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public AppointmentDTO updateAppointment(Integer appointmentId, AppointmentDTO appointmentDTO) {
         Optional<Appointment> optionalAppointment = appointmentRepository.findById(appointmentId);
-        if(optionalAppointment.isPresent()) {
+        if (optionalAppointment.isPresent()) {
             Appointment appointment = optionalAppointment.get();
             appointment.setCreatedDate(appointmentDTO.getCreatedDate());
             appointment.setAppointmentDate(appointmentDTO.getAppointmentDate());

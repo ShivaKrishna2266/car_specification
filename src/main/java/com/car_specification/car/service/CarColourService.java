@@ -1,6 +1,7 @@
 package com.car_specification.car.service;
 
 import com.car_specification.car.dto.CarColourDTO;
+import com.car_specification.car.exception.ApplicationBusinessException;
 
 import java.util.List;
 
@@ -10,9 +11,9 @@ public interface CarColourService {
 
     CarColourDTO getCarColourById(Integer colourId);
 
-    CarColourDTO createColourById(CarColourDTO carColourDTO);
+    CarColourDTO createColour(CarColourDTO carColourDTO);
 
-    CarColourDTO updateColourById(Integer colourId, CarColourDTO carColourDTO);
+    CarColourDTO updateColour(Integer colourId, CarColourDTO carColourDTO);
 
-    Void deleteColourById(Integer colourId);
+    Void deleteColour(Integer colourId);
 }
