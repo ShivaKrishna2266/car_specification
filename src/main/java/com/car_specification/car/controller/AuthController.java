@@ -6,22 +6,22 @@ import com.car_specification.car.service.UserDetailsService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
     @Autowired
     private UserDetailsService userDetailsService;
 
     // Register a new user
     @PostMapping("/register")
-    public UserDTO register(@RequestParam String username, @RequestParam String password) {
-        return userDetailsService.registerUser(username, password);
+    public ResponseEntity<String> registerUser(@RequestParam String username, @RequestParam String password) {
+        userDetailsService.registerUser(username,password);
+        return ResponseEntity.ok("User registered successfully");
     }
+
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password, HttpSession session) {
         User user = userDetailsService.loginUser(username, password);
