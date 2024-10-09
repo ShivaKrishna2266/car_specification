@@ -444,5 +444,97 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    //    ================================CarColour==================================
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/getAllCarColours")
+    public ResponseEntity<ApiResponse<List<CarColourDTO>>> getAllCarColours() {
+        ApiResponse<List<CarColourDTO>> response = new ApiResponse<>();
+        try {
+            List<CarColourDTO> carColourDTOS = carColourService.getAllColours();
+            if (carColourDTOS != null) {
+                response.setStatus(200);
+                response.setMessage("Fetched all carColours successfully!");
+                response.setData(carColourDTOS);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to fetch all carColours!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to fetch carColours!" + ae.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/addCarColour")
+    public ResponseEntity<ApiResponse<CarColourDTO>> addCarColour(@RequestBody CarColourDTO carColourDTO) {
+        ApiResponse<CarColourDTO> response = new ApiResponse<>();
+        try {
+            CarColourDTO addCarColourDTO = carColourService.createColour(carColourDTO);
+            if (addCarColourDTO != null) {
+                response.setStatus(200);
+                response.setMessage("Successfully added a carColour!");
+                response.setData(addCarColourDTO);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to add a carColour!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to add a carColour!" + ae.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/updateCarColour/{carColourId}")
+    public ResponseEntity<ApiResponse<CarColourDTO>> updateCarColour(@PathVariable Integer carColourId, @RequestBody CarColourDTO carColourDTO) {
+        ApiResponse<CarColourDTO> response = new ApiResponse<>();
+        try {
+            CarColourDTO updateCarColourDTO = carColourService.updateColour(carColourId, carColourDTO);
+            if (updateCarColourDTO != null) {
+                response.setStatus(200);
+                response.setMessage("Successfully updated a carColour!");
+                response.setData(updateCarColourDTO);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to update a carColour!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to update a carColour!" + ae.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/deleteCarColour/{carColourId}")
+    public ResponseEntity<ApiResponse<Void>> deleteCarColour(@PathVariable Integer carColourId) {
+        ApiResponse<Void> response = new ApiResponse<>();
+        try {
+            carColourService.deleteColour(carColourId);
+            if (carColourId != null) {
+                response.setStatus(200);
+                response.setMessage("Successfully deleted a carColor!");
+                response.setData(null);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to delete a carColor!");
+                response.setData(null);
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to delete a carColor!" + ae.getMessage());
+            response.setData(null);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
 

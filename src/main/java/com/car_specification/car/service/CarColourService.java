@@ -11,7 +11,7 @@ public interface CarColourService {
 
     CarColourDTO getCarColourById(Integer colourId);
 
-    CarColourDTO createColour(CarColourDTO carColourDTO);
+    CarColourDTO createColour(CarColourDTO carColourDTO) throws ApplicationBusinessException;
 
     CarColourDTO updateColour(Integer colourId, CarColourDTO carColourDTO);
 
