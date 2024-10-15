@@ -1,5 +1,6 @@
 package com.car_specification.car.controller;
 
+import com.car_specification.car.dto.LoginDTO;
 import com.car_specification.car.dto.UserDTO;
 import com.car_specification.car.entity.User;
 import com.car_specification.car.service.UserDetailsService;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class AuthController {
     @Autowired
     private UserDetailsService userDetailsService;
@@ -23,8 +24,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password, HttpSession session) {
-        User user = userDetailsService.loginUser(username, password);
+    public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO, HttpSession session) {
+        User user = userDetailsService.loginUser(loginDTO);
         if (user != null) {
             session.setAttribute("loggedInUser", user);
             return ResponseEntity.ok("Login successful");
