@@ -1,5 +1,6 @@
 package com.car_specification.car.service;
 
+import com.car_specification.car.dto.LoginDTO;
 import com.car_specification.car.dto.UserDTO;
 import com.car_specification.car.entity.User;
 import com.car_specification.car.repository.UserRepository;
@@ -24,12 +25,14 @@ public class UserDetailsService {
         return new UserDTO(savedUser);
     }
 
-    public User loginUser(String username, String password) {
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
+    public User loginUser(LoginDTO loginDTO) {
+        Optional<User> user = userRepository.findByUsername(loginDTO.getUsername());
+        if (user.isPresent()) {
             return user.get();
         }
         return null;  // Invalid username or password
     }
+
+
 }
 
