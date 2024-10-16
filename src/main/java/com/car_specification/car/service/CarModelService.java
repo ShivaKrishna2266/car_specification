@@ -1,6 +1,7 @@
 package com.car_specification.car.service;
 
 import com.car_specification.car.dto.CarModelDTO;
+import com.car_specification.car.entity.CarModel;
 import com.car_specification.car.exception.ApplicationBusinessException;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface CarModelService {
     CarModelDTO updateCarModel(Integer modelId, CarModelDTO carModelDTO);
 
     Void deleteCarModelById(Integer modelId);
+
+    List<CarModelDTO> getAllModelsByBrandId(String brandName);
 }

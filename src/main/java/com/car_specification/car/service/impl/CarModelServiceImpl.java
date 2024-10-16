@@ -1,5 +1,6 @@
 package com.car_specification.car.service.impl;
 
+import com.car_specification.car.dto.CarBrandDTO;
 import com.car_specification.car.dto.CarModelDTO;
 import com.car_specification.car.entity.CarBrand;
 import com.car_specification.car.entity.CarModel;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,11 +50,8 @@ public class CarModelServiceImpl implements CarModelService {
             carModel.setCreatedAt(LocalDateTime.now());
             carModel.setUpdatedBy("System");
             carModel.setUpdatedAt(LocalDateTime.now());
-            CarBrand carBrand = carBrandRepository.findById(carModelDTO.getCarBrandId())
-                    .orElse(null);
-            if (carBrand != null) {
-                carModel.setCarBrands(carBrand);
-            }
+            Optional<CarBrand> carBrandOptional = carBrandRepository.findById(carModelDTO.getCarBrandId());
+            carBrandOptional.ifPresent(carModel::setCarBrands);
             CarModel savedCarModel = carModelRepository.save(carModel);
             CarModelDTO modelDTO = CarModelMapper.convertToDTO(savedCarModel);
             modelDTO.setCarBrandId(carModel.getCarBrands().getBrandId());
@@ -85,4 +84,16 @@ public class CarModelServiceImpl implements CarModelService {
             carModelRepository.deleteById(modelId);
         return null;
     }
+
+    @Override
+    public List<CarModelDTO> getAllModelsByBrandId(String brandName) {
+       List<CarModel> carModels = carModelRepository.findByCarBrandName(brandName);
+       List<CarModelDTO> carModelDTOS = new ArrayList<>();
+       for(CarModel carModel : carModels){
+           CarModelDTO dto = CarModelMapper.convertToDTO(carModel);
+           carModelDTOS.add(dto);
+       }
+       return  carModelDTOS;
+    }
+
 }
