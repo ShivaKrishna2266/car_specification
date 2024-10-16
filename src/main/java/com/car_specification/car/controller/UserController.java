@@ -1,14 +1,17 @@
 package com.car_specification.car.controller;
 
 import com.car_specification.car.dto.CarBrandDTO;
+import com.car_specification.car.dto.CarModelDTO;
 import com.car_specification.car.dto.FeedbackDTO;
 import com.car_specification.car.entity.ApiResponse;
 import com.car_specification.car.exception.ApplicationBusinessException;
 import com.car_specification.car.service.CarBrandService;
+import com.car_specification.car.service.CarModelService;
 import com.car_specification.car.service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +25,9 @@ public class UserController {
     private FeedbackService feedbackService;
     @Autowired
     private CarBrandService carBrandService;
+
+    @Autowired
+    private CarModelService carModelService;
 
     @GetMapping("/getAllFeedbacks")
     public ResponseEntity<ApiResponse<List<FeedbackDTO>>> getAllFeedbacks(){
@@ -134,21 +140,32 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/{getCarBrandId}")
+    @GetMapping("//{}")
     public ResponseEntity<ApiResponse<CarBrandDTO>> getCarBrandId(@PathVariable Integer carBrandId) {
         ApiResponse<CarBrandDTO> response = new ApiResponse<>();
-        CarBrandDTO carBrandDTO = carBrandService.getCarBrandById(carBrandId);
-        if (carBrandDTO != null) {
-            response.setStatus(200);
-            response.setMessage("Fetch Record Successfully");
-            response.setData(carBrandDTO);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } else {
+        try {
+            CarBrandDTO carBrandDTO = carBrandService.getCarBrandById(carBrandId);
+            if (carBrandDTO != null) {
+                response.setStatus(200);
+                response.setMessage("Fetch Record Successfully");
+                response.setData(carBrandDTO);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Record Not Fetched");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (Exception e) {
+            // Log the error
+            System.err.println("Error fetching car brand: " + e.getMessage());
+            e.printStackTrace();
+
             response.setStatus(500);
-            response.setMessage("Record Not Fetched");
+            response.setMessage("Internal Server Error");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @PostMapping("/addCarBrand")
     public ResponseEntity<ApiResponse<CarBrandDTO>> addCarBrand(@RequestBody CarBrandDTO carBrandDTO) {
         ApiResponse<CarBrandDTO> response = new ApiResponse<>();
@@ -211,6 +228,115 @@ public class UserController {
         } catch (ApplicationBusinessException ae) {
             response.setStatus(500);
             response.setMessage("Unable to delete an carBrand!" + ae.getMessage());
+            response.setData(null);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @GetMapping("/carBrand/{brandName}")
+    public ResponseEntity<ApiResponse<List<CarModelDTO>>> getAllModelsByBrandId(@PathVariable String brandName) {
+        ApiResponse<List<CarModelDTO>> response = new ApiResponse<>();
+        List<CarModelDTO> carModels = carModelService.getAllModelsByBrandId(brandName);
+        if (carModels != null) {
+            response.setStatus(200);
+            response.setMessage("Successfully get a CarModel By car brandId !");
+            response.setData(carModels);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            response.setStatus(500);
+            response.setMessage("Failed to get a CarModelByCarBrandId!");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
+    //    ================================CarModels==================================
+
+    @GetMapping("/getAllCarModels")
+    public ResponseEntity<ApiResponse<List<CarModelDTO>>> getAllCarModels() {
+        ApiResponse<List<CarModelDTO>> response = new ApiResponse<>();
+        try {
+            List<CarModelDTO> carModelDTOS = carModelService.getAllCarModels();
+            if (carModelDTOS != null) {
+                response.setStatus(200);
+                response.setMessage("Fetched all carModels successfully!");
+                response.setData(carModelDTOS);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to fetch all carModels!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to fetch carModels!" + ae.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PostMapping("/addCarModel")
+    public ResponseEntity<ApiResponse<CarModelDTO>> addCarModel(@RequestBody CarModelDTO carModelDTO) {
+        ApiResponse<CarModelDTO> response = new ApiResponse<>();
+        try {
+            CarModelDTO addCarModelDTO = carModelService.createCarModel(carModelDTO);
+            if (addCarModelDTO != null) {
+                response.setStatus(200);
+                response.setMessage("Successfully added a carModel!");
+                response.setData(addCarModelDTO);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to add a carModel!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to add a carModel!" + ae.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/updateCarModel/{carModelId}")
+    public ResponseEntity<ApiResponse<CarModelDTO>> updateCarModel(@PathVariable Integer carModelId, @RequestBody CarModelDTO carModelDTO) {
+        ApiResponse<CarModelDTO> response = new ApiResponse<>();
+        try {
+            CarModelDTO updateCarModelDTO = carModelService.updateCarModel(carModelId, carModelDTO);
+            if (updateCarModelDTO != null) {
+                response.setStatus(200);
+                response.setMessage("Successfully updated a carModel!");
+                response.setData(updateCarModelDTO);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to update a carModel!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to update a carModel!" + ae.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @DeleteMapping("/deleteCarModel/{carModelId}")
+    public ResponseEntity<ApiResponse<Void>> deleteCarModel(@PathVariable Integer carModelId) {
+        ApiResponse<Void> response = new ApiResponse<>();
+        try {
+            carModelService.deleteCarModelById(carModelId);
+            if (carModelId != null) {
+                response.setStatus(200);
+                response.setMessage("Successfully deleted a carModel!");
+                response.setData(null);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to delete a carModel!");
+                response.setData(null);
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to delete a carModel!" + ae.getMessage());
             response.setData(null);
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
