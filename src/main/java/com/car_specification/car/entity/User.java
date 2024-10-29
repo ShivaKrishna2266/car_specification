@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -30,6 +31,9 @@ public class User {
     @Column(name = "mobile")
     private String mobile;
 
+    @Column(name = "enabled")
+    private boolean enabled;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -42,7 +46,10 @@ public class User {
     @Column(name = "updated_by")
     private String updatedBy;
 
-    @ManyToOne
-    @JoinColumn(name = "role")
-    private Role role;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+
 }
