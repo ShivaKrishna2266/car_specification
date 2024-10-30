@@ -50,6 +50,9 @@ public class UserDetailsService {
         return null;  // Invalid username or password
     }
 
-
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 }
 

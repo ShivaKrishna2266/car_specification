@@ -1,23 +1,29 @@
 package com.car_specification.car.controller;
 
 import com.car_specification.car.dto.AppointmentDTO;
-import com.car_specification.car.dto.CarColourDTO;
 import com.car_specification.car.dto.CarBrandDTO;
+import com.car_specification.car.dto.CarColourDTO;
 import com.car_specification.car.dto.CarModelDTO;
 import com.car_specification.car.dto.FeedbackDTO;
 import com.car_specification.car.entity.ApiResponse;
-import com.car_specification.car.entity.CarColour;
 import com.car_specification.car.exception.ApplicationBusinessException;
 import com.car_specification.car.service.AppointmentService;
-import com.car_specification.car.service.CarColourService;
 import com.car_specification.car.service.CarBrandService;
+import com.car_specification.car.service.CarColourService;
 import com.car_specification.car.service.CarModelService;
 import com.car_specification.car.service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -40,7 +46,7 @@ public class AdminController {
     @Autowired
     private CarBrandService carBrandService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+ 
     @GetMapping("/getAllCarModels")
     public ResponseEntity<ApiResponse<List<CarModelDTO>>> getAllCarModels() {
         ApiResponse<List<CarModelDTO>> response = new ApiResponse<>();
@@ -63,7 +69,7 @@ public class AdminController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN)")
+ 
     @PostMapping("/addCarModel")
     public ResponseEntity<ApiResponse<CarModelDTO>> addCarModel(@RequestBody CarModelDTO carModelDTO) {
         ApiResponse<CarModelDTO> response = new ApiResponse<>();
@@ -86,7 +92,7 @@ public class AdminController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN)")
+ 
     @PutMapping("/updateCarModel/{carModelId}")
     public ResponseEntity<ApiResponse<CarModelDTO>> updateCarModel(@PathVariable Integer carModelId, @RequestBody CarModelDTO carModelDTO) {
         ApiResponse<CarModelDTO> response = new ApiResponse<>();
@@ -108,7 +114,7 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PreAuthorize("hasRole('ADMIN)")
+ 
     @DeleteMapping("/deleteCarModel/{carModelId}")
     public ResponseEntity<ApiResponse<Void>> deleteCarModel(@PathVariable Integer carModelId) {
         ApiResponse<Void> response = new ApiResponse<>();
@@ -133,7 +139,7 @@ public class AdminController {
         }
     }
     //    ================================Appointments==================================
-    @PreAuthorize("hasRole('ADMIN')")
+ 
     @GetMapping("/getAllAppointments")
     public ResponseEntity<ApiResponse<List<AppointmentDTO>>> getAllAppointments() {
         ApiResponse<List<AppointmentDTO>> response = new ApiResponse<>();
@@ -155,7 +161,7 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PreAuthorize("hasRole('ADMIN)")
+ 
     @PostMapping("/addAppointment")
     public ResponseEntity<ApiResponse<AppointmentDTO>> addCarModel(@RequestBody AppointmentDTO appointmentDTO) {
         ApiResponse<AppointmentDTO> response = new ApiResponse<>();
@@ -177,7 +183,7 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PreAuthorize("hasRole('ADMIN)")
+ 
     @PutMapping("/updateAppointment/{appointmentId}")
     public ResponseEntity<ApiResponse<AppointmentDTO>> updateAppointment(@PathVariable Integer appointmentId, @RequestBody AppointmentDTO appointmentDTO) {
         ApiResponse<AppointmentDTO> response = new ApiResponse<>();
@@ -199,7 +205,7 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PreAuthorize("hasRole('ADMIN)")
+ 
     @DeleteMapping("/deleteAppointment/{appointmentId}")
     public ResponseEntity<ApiResponse<Void>> deleteAppointment(@PathVariable Integer appointmentId) {
         ApiResponse<Void> response = new ApiResponse<>();
@@ -291,21 +297,6 @@ public class AdminController {
         }
     }
 
-    //    @DeleteMapping("/deleteFeedback/{feedBackId}")
-//    public ResponseEntity<ApiResponse<FeedbackDTO>> deleteFeedback(@PathVariable Integer feedBackId){
-//        ApiResponse<FeedbackDTO> response = new ApiResponse<>();
-//        FeedbackDTO feedbackDTO1 = feedbackService.deleteFeedbackById(feedBackId);
-//        if(feedbackDTO1 != null){
-//            response.setStatus(200);
-//            response.setMessage("Update a FeedBack successfully!");
-//            response.setData(feedbackDTO1);
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        }else {
-//            response.setStatus(500);
-//            response.setMessage("Failed to update a FeedBack!");
-//            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
 
     @DeleteMapping("/deleteFeedBack/{feedBackId}")
     public ResponseEntity<ApiResponse<Void>> deleteFeedBack(@PathVariable Integer feedBackId) {
@@ -334,7 +325,7 @@ public class AdminController {
 
 //        ======================CarBrand=============================
 
-    @PreAuthorize("hasRole('ADMIN')")
+ 
     @GetMapping("/getAllCarBrand")
     public ResponseEntity<ApiResponse<List<CarBrandDTO>>> getAllCarBrand() {
         ApiResponse<List<CarBrandDTO>> response = new ApiResponse<>();
@@ -356,7 +347,7 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PreAuthorize("hasRole('ADMIN')")
+ 
     @GetMapping("/{getCarBrandId}")
     public ResponseEntity<ApiResponse<CarBrandDTO>> getCarBrandId(@PathVariable Integer carBrandId) {
         ApiResponse<CarBrandDTO> response = new ApiResponse<>();
@@ -374,7 +365,7 @@ public class AdminController {
     }
 
 
-    @PreAuthorize("hasRole('ADMIN)")
+ 
     @PostMapping("/addCarBrand")
     public ResponseEntity<ApiResponse<CarBrandDTO>> addCarBrand(@RequestBody CarBrandDTO carBrandDTO) {
         ApiResponse<CarBrandDTO> response = new ApiResponse<>();
@@ -397,7 +388,7 @@ public class AdminController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN)")
+ 
     @PutMapping("/updateCarBrand/{carBrandId}")
     public ResponseEntity<ApiResponse<CarBrandDTO>> updateCarBrand(@PathVariable Integer carBrandId, @RequestBody CarBrandDTO carBrandDTO) {
         ApiResponse<CarBrandDTO> response = new ApiResponse<>();
@@ -420,7 +411,7 @@ public class AdminController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN)")
+ 
     @DeleteMapping("/deleteCarBrand/{carBrandId}")
     public ResponseEntity<ApiResponse<Void>> deleteCarBrand(@PathVariable Integer carBrandId) {
         ApiResponse<Void> response = new ApiResponse<>();
@@ -445,7 +436,7 @@ public class AdminController {
         }
     }
     //    ================================CarColour==================================
-    @PreAuthorize("hasRole('ADMIN')")
+ 
     @GetMapping("/getAllCarColours")
     public ResponseEntity<ApiResponse<List<CarColourDTO>>> getAllCarColours() {
         ApiResponse<List<CarColourDTO>> response = new ApiResponse<>();
@@ -467,7 +458,7 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PreAuthorize("hasRole('ADMIN')")
+ 
     @PostMapping("/addCarColour")
     public ResponseEntity<ApiResponse<CarColourDTO>> addCarColour(@RequestBody CarColourDTO carColourDTO) {
         ApiResponse<CarColourDTO> response = new ApiResponse<>();
@@ -489,7 +480,7 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PreAuthorize("hasRole('ADMIN')")
+ 
     @PutMapping("/updateCarColour/{carColourId}")
     public ResponseEntity<ApiResponse<CarColourDTO>> updateCarColour(@PathVariable Integer carColourId, @RequestBody CarColourDTO carColourDTO) {
         ApiResponse<CarColourDTO> response = new ApiResponse<>();
@@ -512,7 +503,7 @@ public class AdminController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+ 
     @DeleteMapping("/deleteCarColour/{carColourId}")
     public ResponseEntity<ApiResponse<Void>> deleteCarColour(@PathVariable Integer carColourId) {
         ApiResponse<Void> response = new ApiResponse<>();
