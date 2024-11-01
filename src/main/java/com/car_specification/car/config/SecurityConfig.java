@@ -25,7 +25,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())  // Disable CSRF if using JWTs (not recommended for stateful sessions)
+                .cors() // Enable CORS with configuration from WebConfig
+                .and()
+                .csrf(csrf -> csrf.disable())  // Disable CSRF if using JWTs (recommended for stateless sessions)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("register", "authenticate", "/actuator/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
