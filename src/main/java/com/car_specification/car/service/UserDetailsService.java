@@ -29,6 +29,8 @@ public class UserDetailsService {
     public UserDTO registerUser(UserRegistrationDTO request) {
         User user = new User();
         user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setMobile(request.getMobile());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         Role adminRole = roleService.findByRoleName(request.getRole());
         if (adminRole == null) {
