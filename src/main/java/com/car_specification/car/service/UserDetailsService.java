@@ -5,12 +5,15 @@ import com.car_specification.car.dto.UserDTO;
 import com.car_specification.car.dto.UserRegistrationDTO;
 import com.car_specification.car.entity.Role;
 import com.car_specification.car.entity.User;
+import com.car_specification.car.entity.UserProfile;
+import com.car_specification.car.repository.UserProfileRepository;
 import com.car_specification.car.repository.UserRepository;
 import com.car_specification.car.service.impl.RoleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -26,7 +29,10 @@ public class UserDetailsService {
     @Autowired
     private RoleService roleService;
 
-    public UserDTO registerUser(UserRegistrationDTO request) {
+    @Autowired
+    private UserProfileRepository userProfileRepository;
+
+    public UserDTO registerUser(UserDTO request) {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
@@ -40,8 +46,21 @@ public class UserDetailsService {
         roles.add(adminRole);
         user.setRoles(roles);
         user.setEnabled(true);
-        User savedUser = userRepository.save(user);
-        return new UserDTO(savedUser);
+        userRepository.save(user);
+
+        UserProfile userProfile =new UserProfile();
+        userProfile.setUserName(request.getUsername());
+        userProfile.setEmail(request.getEmail());
+        userProfile.setMobileNumber(request.getMobile());
+        userProfile.setPassword(request.getPassword());
+        userProfile.setCreatedBy("System");
+        userProfile.setUpdatedBy("System");
+        userProfile.setCreatedAt(LocalDateTime.now());
+        userProfile.setUpdatedAt(LocalDateTime.now());
+
+        userProfileRepository.save(userProfile);
+        return request;
+
     }
 
     public User loginUser(LoginDTO loginDTO) {
