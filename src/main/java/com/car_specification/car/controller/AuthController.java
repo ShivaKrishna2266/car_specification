@@ -3,6 +3,7 @@ package com.car_specification.car.controller;
 import com.car_specification.car.config.CustomUserDetailsService;
 import com.car_specification.car.config.JwtUtil;
 import com.car_specification.car.dto.LoginDTO;
+import com.car_specification.car.dto.UserDTO;
 import com.car_specification.car.dto.UserRegistrationDTO;
 import com.car_specification.car.entity.Role;
 import com.car_specification.car.entity.User;
@@ -22,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
     @Autowired
     private UserDetailsService userDetailsService;
@@ -38,7 +39,7 @@ public class AuthController {
 
     // Register a new user
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody UserRegistrationDTO request) {
+    public ResponseEntity<String> registerUser(@RequestBody UserDTO request) {
         userDetailsService.registerUser(request);
         return ResponseEntity.ok("User registered successfully");
     }
