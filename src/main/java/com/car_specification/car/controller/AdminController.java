@@ -93,11 +93,11 @@ public class AdminController {
     }
 
  
-    @PutMapping("/updateCarModel/{carModelId}")
-    public ResponseEntity<ApiResponse<CarModelDTO>> updateCarModel(@PathVariable Integer carModelId, @RequestBody CarModelDTO carModelDTO) {
+    @PutMapping("/updateCarModel/{modelId}")
+    public ResponseEntity<ApiResponse<CarModelDTO>> updateCarModel(@PathVariable Integer modelId, @RequestBody CarModelDTO carModelDTO) {
         ApiResponse<CarModelDTO> response = new ApiResponse<>();
         try {
-            CarModelDTO updateCarModelDTO = carModelService.updateCarModel(carModelId, carModelDTO);
+            CarModelDTO updateCarModelDTO = carModelService.updateCarModel(modelId, carModelDTO);
             if (updateCarModelDTO != null) {
                 response.setStatus(200);
                 response.setMessage("Successfully updated a carModel!");

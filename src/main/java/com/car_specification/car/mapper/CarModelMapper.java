@@ -1,8 +1,6 @@
 package com.car_specification.car.mapper;
 
-import com.car_specification.car.dto.CarColourDTO;
 import com.car_specification.car.dto.CarModelDTO;
-import com.car_specification.car.entity.CarColour;
 import com.car_specification.car.entity.CarModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;

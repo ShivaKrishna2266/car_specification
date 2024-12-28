@@ -21,6 +21,18 @@ public class CarBrand {
     @Column(name = "brand_name")
     private String brandName;
 
+    @Column(name = "country_of_origin")
+    private  String countryOfOrigin;
+
+    @Column(name ="founded_year")
+    private Integer foundedYear;
+
+    @Column(name ="logoUrl")
+    private  String logoUrl;
+
+    @Column(name= "description")
+    private String description;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

@@ -40,6 +40,10 @@ public class CarBrandServiceImpl implements CarBrandService {
         try {
             CarBrand carBrand = CarBrandMapper.convertToEntity(carBrandDTO);
             carBrand.setBrandName(carBrandDTO.getBrandName());
+            carBrand.setDescription(carBrandDTO.getDescription());
+            carBrand.setCountryOfOrigin(carBrandDTO.getCountryOfOrigin());
+            carBrand.setFoundedYear(carBrandDTO.getFoundedYear());
+            carBrand.setLogoUrl(carBrandDTO.getLogoUrl());
             carBrand.setCreatedBy("System");
             carBrand.setCreatedAt(LocalDateTime.now());
             carBrand.setUpdatedBy("System");
