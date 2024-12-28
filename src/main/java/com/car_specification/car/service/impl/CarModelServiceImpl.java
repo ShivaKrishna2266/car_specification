@@ -1,6 +1,5 @@
 package com.car_specification.car.service.impl;
 
-import com.car_specification.car.dto.CarBrandDTO;
 import com.car_specification.car.dto.CarModelDTO;
 import com.car_specification.car.entity.CarBrand;
 import com.car_specification.car.entity.CarModel;
@@ -69,6 +68,10 @@ public class CarModelServiceImpl implements CarModelService {
             carModel.setModelName(carModelDTO.getModelName());
             carModel.setPrice(carModelDTO.getPrice());
             carModel.setSpecifications(carModelDTO.getSpecifications());
+            CarBrand carBrand = carBrandRepository.findById(carModelDTO.getCarBrandId()).orElse(null);
+            if (carBrand != null) {
+                carModel.setCarBrands(carBrand);
+            }
             CarModel savedCarModel = carModelRepository.save((carModel));
             CarModelDTO carModelDTO1 = CarModelMapper.convertToDTO(savedCarModel);
             carModelDTO1.setCarBrandId(savedCarModel.getCarBrands().getBrandId());
