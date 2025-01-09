@@ -9,10 +9,10 @@ import java.util.List;
 
 @Repository
 public interface CarModelRepository extends JpaRepository<CarModel, Integer> {
-    @Query("SELECT cm FROM CarModel cm WHERE cm.carBrands.brandId = :carBrandId")
-    List<CarModel> findByCarBrandId(@Param("carBrandId") Integer carBrandId);
+    @Query("SELECT cm FROM CarModel cm WHERE cm.carBrand.brandId = :brandId")
+    List<CarModel> findByCarBrandBrandId(@Param("brandId") Integer brandId);
 
-    @Query("SELECT cm FROM CarModel cm WHERE cm.carBrands.brandName = :brandName")
+    @Query("SELECT cm FROM CarModel cm WHERE cm.carBrand.brandName = :brandName")
     List<CarModel> findByCarBrandName(@Param("brandName") String brandName);
 
 }

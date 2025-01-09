@@ -49,11 +49,11 @@ public class CarModelServiceImpl implements CarModelService {
             carModel.setCreatedAt(LocalDateTime.now());
             carModel.setUpdatedBy("System");
             carModel.setUpdatedAt(LocalDateTime.now());
-            Optional<CarBrand> carBrandOptional = carBrandRepository.findById(carModelDTO.getCarBrandId());
-            carBrandOptional.ifPresent(carModel::setCarBrands);
+            Optional<CarBrand> carBrandOptional = carBrandRepository.findById(carModelDTO.getBrandId());
+            carBrandOptional.ifPresent(carModel::setCarBrand);
             CarModel savedCarModel = carModelRepository.save(carModel);
             CarModelDTO modelDTO = CarModelMapper.convertToDTO(savedCarModel);
-            modelDTO.setCarBrandId(carModel.getCarBrands().getBrandId());
+            modelDTO.setBrandId(carModel.getCarBrand().getBrandId());
             return modelDTO;
         } catch (Exception e) {
             throw new ApplicationBusinessException("Error occurred: " + e.getMessage());
@@ -68,13 +68,13 @@ public class CarModelServiceImpl implements CarModelService {
             carModel.setModelName(carModelDTO.getModelName());
             carModel.setPrice(carModelDTO.getPrice());
             carModel.setSpecifications(carModelDTO.getSpecifications());
-            CarBrand carBrand = carBrandRepository.findById(carModelDTO.getCarBrandId()).orElse(null);
+            CarBrand carBrand = carBrandRepository.findById(carModelDTO.getBrandId()).orElse(null);
             if (carBrand != null) {
-                carModel.setCarBrands(carBrand);
+                carModel.setCarBrand(carBrand);
             }
             CarModel savedCarModel = carModelRepository.save((carModel));
             CarModelDTO carModelDTO1 = CarModelMapper.convertToDTO(savedCarModel);
-            carModelDTO1.setCarBrandId(savedCarModel.getCarBrands().getBrandId());
+            carModelDTO1.setBrandId(savedCarModel.getCarBrand().getBrandId());
             return carModelDTO1;
         } else {
             return null;
@@ -97,6 +97,7 @@ public class CarModelServiceImpl implements CarModelService {
            carModelDTOS.add(dto);
        }
        return  carModelDTOS;
+
     }
 
 }

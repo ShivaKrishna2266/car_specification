@@ -69,6 +69,23 @@ public class AdminController {
         }
     }
 
+
+    @GetMapping("/getCarModelById/{modelId}")
+    public ResponseEntity<ApiResponse<CarModelDTO>> getCarModelById(@PathVariable Integer modelId) {
+        ApiResponse<CarModelDTO> response = new ApiResponse<>();
+        CarModelDTO carModelDTO = carModelService.getCarModelById(modelId);
+        if (carModelDTO != null) {
+            response.setStatus(200);
+            response.setMessage("Fetch Record Successfully");
+            response.setData(carModelDTO);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            response.setStatus(500);
+            response.setMessage("Record Not Fetched");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
  
     @PostMapping("/addCarModel")
     public ResponseEntity<ApiResponse<CarModelDTO>> addCarModel(@RequestBody CarModelDTO carModelDTO) {
