@@ -63,6 +63,10 @@ public class CarBrandServiceImpl implements CarBrandService {
            if (optionalCarBrand.isPresent()){
                CarBrand carBrand = optionalCarBrand.get();
                carBrand.setBrandName(carBrandDTO.getBrandName());
+               carBrand.setCountryOfOrigin(carBrandDTO.getCountryOfOrigin());
+               carBrand.setDescription(carBrandDTO.getDescription());
+               carBrand.setLogoUrl(carBrandDTO.getLogoUrl());
+               carBrand.setFoundedYear(carBrandDTO.getFoundedYear());
                CarBrand savedCarBrand = carBrandRepository.save(carBrand);
                CarBrandDTO carBrandDTO1= CarBrandMapper.convertToDTO(savedCarBrand);
                return carBrandDTO1;

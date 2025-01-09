@@ -12,5 +12,5 @@ public class CarModelDTO {
     private String modelName;
     private Double price;
     private String specifications;
-    private Integer carBrandId;
+    private Integer brandId;
 }
