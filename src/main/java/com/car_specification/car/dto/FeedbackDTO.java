@@ -13,7 +13,7 @@ public class FeedbackDTO {
     private Integer feedbackId;
     private String rating;
     private  String description;
-    private Integer carBrandId;
-    private Integer carModelId;
+    private Integer brandId;
+    private Integer modelId;
     private Integer userId;
 }

@@ -15,4 +15,8 @@ public interface CarModelRepository extends JpaRepository<CarModel, Integer> {
     @Query("SELECT cm FROM CarModel cm WHERE cm.carBrand.brandName = :brandName")
     List<CarModel> findByCarBrandName(@Param("brandName") String brandName);
 
+    @Query("SELECT cm FROM CarModel cm JOIN FETCH cm.carBrand")
+    List<CarModel> findAllWithBrand();
+
+
 }

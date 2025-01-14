@@ -24,11 +24,12 @@ public class CarModelServiceImpl implements CarModelService {
     private CarBrandRepository carBrandRepository;
     @Override
     public List<CarModelDTO> getAllCarModels() {
-        return carModelRepository.findAll()
+        return carModelRepository.findAllWithBrand()
                 .stream()
                 .map(CarModelMapper::convertToDTO)
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public CarModelDTO getCarModelById(Integer modelId) {

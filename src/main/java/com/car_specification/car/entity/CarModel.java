@@ -39,7 +39,7 @@ public class CarModel {
     @Column(name = "updated_by")
     private String updatedBy;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_brand_id")
     private CarBrand carBrand;
 }

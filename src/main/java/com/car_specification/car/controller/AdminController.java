@@ -46,7 +46,7 @@ public class AdminController {
     @Autowired
     private CarBrandService carBrandService;
 
- 
+
     @GetMapping("/getAllCarModels")
     public ResponseEntity<ApiResponse<List<CarModelDTO>>> getAllCarModels() {
         ApiResponse<List<CarModelDTO>> response = new ApiResponse<>();
@@ -86,7 +86,7 @@ public class AdminController {
         }
     }
 
- 
+
     @PostMapping("/addCarModel")
     public ResponseEntity<ApiResponse<CarModelDTO>> addCarModel(@RequestBody CarModelDTO carModelDTO) {
         ApiResponse<CarModelDTO> response = new ApiResponse<>();
@@ -109,7 +109,7 @@ public class AdminController {
         }
     }
 
- 
+
     @PutMapping("/updateCarModel/{modelId}")
     public ResponseEntity<ApiResponse<CarModelDTO>> updateCarModel(@PathVariable Integer modelId, @RequestBody CarModelDTO carModelDTO) {
         ApiResponse<CarModelDTO> response = new ApiResponse<>();
@@ -131,7 +131,7 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
- 
+
     @DeleteMapping("/deleteCarModel/{carModelId}")
     public ResponseEntity<ApiResponse<Void>> deleteCarModel(@PathVariable Integer carModelId) {
         ApiResponse<Void> response = new ApiResponse<>();
@@ -156,7 +156,7 @@ public class AdminController {
         }
     }
     //    ================================Appointments==================================
- 
+
     @GetMapping("/getAllAppointments")
     public ResponseEntity<ApiResponse<List<AppointmentDTO>>> getAllAppointments() {
         ApiResponse<List<AppointmentDTO>> response = new ApiResponse<>();
@@ -178,7 +178,7 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
- 
+
     @PostMapping("/addAppointment")
     public ResponseEntity<ApiResponse<AppointmentDTO>> addCarModel(@RequestBody AppointmentDTO appointmentDTO) {
         ApiResponse<AppointmentDTO> response = new ApiResponse<>();
@@ -200,7 +200,7 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
- 
+
     @PutMapping("/updateAppointment/{appointmentId}")
     public ResponseEntity<ApiResponse<AppointmentDTO>> updateAppointment(@PathVariable Integer appointmentId, @RequestBody AppointmentDTO appointmentDTO) {
         ApiResponse<AppointmentDTO> response = new ApiResponse<>();
@@ -222,7 +222,7 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
- 
+
     @DeleteMapping("/deleteAppointment/{appointmentId}")
     public ResponseEntity<ApiResponse<Void>> deleteAppointment(@PathVariable Integer appointmentId) {
         ApiResponse<Void> response = new ApiResponse<>();
@@ -251,30 +251,31 @@ public class AdminController {
 
 
     @GetMapping("/getAllFeedbacks")
-    public ResponseEntity<ApiResponse<List<FeedbackDTO>>> getAllFeedbacks(){
+    public ResponseEntity<ApiResponse<List<FeedbackDTO>>> getAllFeedbacks() {
         ApiResponse<List<FeedbackDTO>> response = new ApiResponse<>();
         List<FeedbackDTO> feedbackDTOS = feedbackService.getAllFeedbacks();
-        if (feedbackDTOS != null){
+        if (feedbackDTOS != null) {
             response.setStatus(200);
             response.setMessage("Fetch all records successfully!");
             response.setData(feedbackDTOS);
-            return  new ResponseEntity<>(response, HttpStatus.OK);
-        }else {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
             response.setStatus(500);
             response.setMessage("Failed to Fetch!");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping("/{getFeedBackById}")
-    public ResponseEntity<ApiResponse<FeedbackDTO>> getFeedBackById(@PathVariable Integer feedbackId){
+    public ResponseEntity<ApiResponse<FeedbackDTO>> getFeedBackById(@PathVariable Integer feedbackId) {
         ApiResponse<FeedbackDTO> response = new ApiResponse<>();
         FeedbackDTO feedbackDTOS = feedbackService.getFeedbackById(feedbackId);
-        if(feedbackDTOS != null){
+        if (feedbackDTOS != null) {
             response.setStatus(200);
             response.setMessage("Fetch Record Successfully");
             response.setData(feedbackDTOS);
-            return  new ResponseEntity<>(response, HttpStatus.OK);
-        }else {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
             response.setStatus(500);
             response.setMessage("Record Not Fetched");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -282,15 +283,15 @@ public class AdminController {
     }
 
     @PostMapping("/createFeedback")
-    public ResponseEntity<ApiResponse<FeedbackDTO>> createFeedback(@RequestBody FeedbackDTO feedbackDTO){
+    public ResponseEntity<ApiResponse<FeedbackDTO>> createFeedback(@RequestBody FeedbackDTO feedbackDTO) {
         ApiResponse<FeedbackDTO> response = new ApiResponse<>();
         FeedbackDTO feedbackDTO1 = feedbackService.createFeedback(feedbackDTO);
-        if(feedbackDTO1 != null){
+        if (feedbackDTO1 != null) {
             response.setStatus(200);
             response.setMessage("Created a FeedBack successfully!");
             response.setData(feedbackDTO1);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        }else {
+        } else {
             response.setStatus(500);
             response.setMessage("Failed to create a FeedBack!");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -342,7 +343,7 @@ public class AdminController {
 
 //        ======================CarBrand=============================
 
- 
+
     @GetMapping("/getAllCarBrand")
     public ResponseEntity<ApiResponse<List<CarBrandDTO>>> getAllCarBrand() {
         ApiResponse<List<CarBrandDTO>> response = new ApiResponse<>();
@@ -364,11 +365,11 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
- 
-    @GetMapping("/{getCarBrandId}")
-    public ResponseEntity<ApiResponse<CarBrandDTO>> getCarBrandId(@PathVariable Integer carBrandId) {
+
+    @GetMapping("/getCarBrandById/{brandId}")
+    public ResponseEntity<ApiResponse<CarBrandDTO>> getCarBrandById(@PathVariable Integer brandId) {
         ApiResponse<CarBrandDTO> response = new ApiResponse<>();
-        CarBrandDTO carBrandDTO = carBrandService.getCarBrandById(carBrandId);
+        CarBrandDTO carBrandDTO = carBrandService.getCarBrandById(brandId);
         if (carBrandDTO != null) {
             response.setStatus(200);
             response.setMessage("Fetch Record Successfully");
@@ -382,7 +383,6 @@ public class AdminController {
     }
 
 
- 
     @PostMapping("/addCarBrand")
     public ResponseEntity<ApiResponse<CarBrandDTO>> addCarBrand(@RequestBody CarBrandDTO carBrandDTO) {
         ApiResponse<CarBrandDTO> response = new ApiResponse<>();
@@ -405,7 +405,7 @@ public class AdminController {
         }
     }
 
- 
+
     @PutMapping("/updateCarBrand/{carBrandId}")
     public ResponseEntity<ApiResponse<CarBrandDTO>> updateCarBrand(@PathVariable Integer carBrandId, @RequestBody CarBrandDTO carBrandDTO) {
         ApiResponse<CarBrandDTO> response = new ApiResponse<>();
@@ -428,7 +428,7 @@ public class AdminController {
         }
     }
 
- 
+
     @DeleteMapping("/deleteCarBrand/{carBrandId}")
     public ResponseEntity<ApiResponse<Void>> deleteCarBrand(@PathVariable Integer carBrandId) {
         ApiResponse<Void> response = new ApiResponse<>();
@@ -453,7 +453,7 @@ public class AdminController {
         }
     }
     //    ================================CarColour==================================
- 
+
     @GetMapping("/getAllCarColours")
     public ResponseEntity<ApiResponse<List<CarColourDTO>>> getAllCarColours() {
         ApiResponse<List<CarColourDTO>> response = new ApiResponse<>();
@@ -475,7 +475,26 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
- 
+
+
+    @GetMapping("/getCarColourById/{colourId}")
+    public ResponseEntity<ApiResponse<CarColourDTO>> getCarColourById(@PathVariable Integer colourId) {
+        ApiResponse<CarColourDTO> response = new ApiResponse<>();
+        CarColourDTO carColourDTO = carColourService.getCarColourById(colourId);
+        if (carColourDTO != null) {
+            response.setStatus(200);
+            response.setMessage("Fetch Record Successfully");
+            response.setData(carColourDTO);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            response.setStatus(500);
+            response.setMessage("Record Not Fetched");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
     @PostMapping("/addCarColour")
     public ResponseEntity<ApiResponse<CarColourDTO>> addCarColour(@RequestBody CarColourDTO carColourDTO) {
         ApiResponse<CarColourDTO> response = new ApiResponse<>();
@@ -497,7 +516,7 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
- 
+
     @PutMapping("/updateCarColour/{carColourId}")
     public ResponseEntity<ApiResponse<CarColourDTO>> updateCarColour(@PathVariable Integer carColourId, @RequestBody CarColourDTO carColourDTO) {
         ApiResponse<CarColourDTO> response = new ApiResponse<>();
@@ -520,7 +539,7 @@ public class AdminController {
         }
     }
 
- 
+
     @DeleteMapping("/deleteCarColour/{carColourId}")
     public ResponseEntity<ApiResponse<Void>> deleteCarColour(@PathVariable Integer carColourId) {
         ApiResponse<Void> response = new ApiResponse<>();
@@ -544,5 +563,6 @@ public class AdminController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }
 
