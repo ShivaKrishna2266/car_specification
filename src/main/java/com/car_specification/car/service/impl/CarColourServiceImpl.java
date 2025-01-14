@@ -25,7 +25,7 @@ public class CarColourServiceImpl implements CarColourService {
     private CarModelRepository carModelRepository;
     @Override
     public List<CarColourDTO> getAllColours() {
-        return carColourRepository.findAll()
+        return carColourRepository.findAllWithCarModel()
                 .stream()
                 .map(CarColourMapper::convertToDTO)
                 .collect(Collectors.toList());

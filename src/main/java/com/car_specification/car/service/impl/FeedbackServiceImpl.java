@@ -59,6 +59,16 @@ public class FeedbackServiceImpl implements FeedbackService {
             convertToEntity.setUpdatedBy("System");
             convertToEntity.setCreatedAt(LocalDateTime.now());
             convertToEntity.setUpdatedAt(LocalDateTime.now());
+
+            Optional<CarBrand> carBrandOptional = carBrandRepository.findById(feedbackDTO.getBrandId());
+            carBrandOptional.ifPresent(convertToEntity::setCarBrands);
+
+            Optional<CarModel> carModelOptional = carModelRepository.findById(feedbackDTO.getModelId());
+            carModelOptional.ifPresent(convertToEntity::setCarModel);
+
+            Optional<User> userOptional = userRepository.findById(feedbackDTO.getUserId());
+            userOptional.ifPresent(convertToEntity::setUsers);
+
             feedbackRepository.save(convertToEntity);
             return feedbackDTO;
         }catch (Exception e){
@@ -75,7 +85,7 @@ public class FeedbackServiceImpl implements FeedbackService {
                 existingFeedBack.setRating(feedbackDTO.getRating());
                 existingFeedBack.setDescription(feedbackDTO.getDescription());
                 existingFeedBack.setFeedbackId(feedbackDTO.getFeedbackId());
-                CarModel carModel = carModelRepository.findById(feedbackDTO.getCarModelId()).orElse(null);
+                CarModel carModel = carModelRepository.findById(feedbackDTO.getModelId()).orElse(null);
                 if(carModel != null){
                     existingFeedBack.setCarModel(carModel);
                 }
@@ -83,7 +93,7 @@ public class FeedbackServiceImpl implements FeedbackService {
                 if(user != null){
                     existingFeedBack.setUsers(user);
                 }
-                CarBrand carBrand = carBrandRepository.findById(feedbackDTO.getCarBrandId()).orElse(null);
+                CarBrand carBrand = carBrandRepository.findById(feedbackDTO.getBrandId()).orElse(null);
                 if(carBrand != null){
                     existingFeedBack.setCarBrands(carBrand);
                 }

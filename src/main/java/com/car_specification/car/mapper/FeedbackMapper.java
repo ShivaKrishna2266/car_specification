@@ -10,6 +10,18 @@ public class FeedbackMapper {
     public static FeedbackDTO convertToDTO(Feedback feedback){
         FeedbackDTO feedbackDTO =new FeedbackDTO();
         BeanUtils.copyProperties(feedback,feedbackDTO);
+
+        if (feedback.getCarBrands() != null) {
+            feedbackDTO.setBrandId(feedback.getCarBrands().getBrandId());
+        }
+
+        if ( feedback.getCarModel() != null) {
+            feedbackDTO.setModelId(feedback.getCarModel().getModelId());
+        }
+
+        if (feedback.getUsers() != null) {
+            feedbackDTO.setUserId(feedback.getUsers().getUserId());
+        }
         return feedbackDTO;
     }
     public static Feedback convertToEntity(FeedbackDTO feedbackDTO){

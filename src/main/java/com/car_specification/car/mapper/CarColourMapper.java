@@ -10,6 +10,9 @@ public class CarColourMapper {
     public static CarColourDTO convertToDTO(CarColour carColour){
         CarColourDTO carColourDTO =new CarColourDTO();
         BeanUtils.copyProperties(carColour,carColourDTO);
+        if (carColour.getCarModel() != null) {
+            carColourDTO.setCarModelId(carColour.getCarModel().getModelId());
+        }
         return carColourDTO;
     }
     public static  CarColour convertToEntity(CarColourDTO carColourDTO){
