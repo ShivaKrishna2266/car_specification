@@ -11,7 +11,7 @@ public class CarColourMapper {
         CarColourDTO carColourDTO =new CarColourDTO();
         BeanUtils.copyProperties(carColour,carColourDTO);
         if (carColour.getCarModel() != null) {
-            carColourDTO.setCarModelId(carColour.getCarModel().getModelId());
+            carColourDTO.setModelId(carColour.getCarModel().getModelId());
         }
         return carColourDTO;
     }

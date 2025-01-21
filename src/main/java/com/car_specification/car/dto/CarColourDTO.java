@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class CarColourDTO {
     private Integer colourId;
     private String colourName;
-    private Integer carModelId;
+    private Integer modelId;
 }
