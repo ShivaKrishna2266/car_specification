@@ -50,13 +50,13 @@ public class CarColourServiceImpl implements CarColourService {
             carColour.setCreatedAt(LocalDateTime.now());
             carColour.setUpdatedBy("System");
             carColour.setUpdatedAt(LocalDateTime.now());
-            CarModel carModel = carModelRepository.findById(carColourDTO.getCarModelId()).orElse(null);
+            CarModel carModel = carModelRepository.findById(carColourDTO.getModelId()).orElse(null);
             if (carModel != null) {
                 carColour.setCarModel(carModel);
             }
             CarColour savedCarColour = carColourRepository.save(carColour);
             CarColourDTO carColourDTO1 = CarColourMapper.convertToDTO(savedCarColour);
-            carColourDTO1.setCarModelId(carColour.getCarModel().getModelId());
+            carColourDTO1.setModelId(carColour.getCarModel().getModelId());
             return carColourDTO1;
         } catch (Exception e) {
             throw new ApplicationBusinessException("Error occurred: " + e.getMessage());
@@ -71,7 +71,7 @@ public class CarColourServiceImpl implements CarColourService {
             carColour.setColourName(carColourDTO.getColourName());
             CarColour updatedCarColor = carColourRepository.save(carColour);
             CarColourDTO carColourDTO1 = CarColourMapper.convertToDTO(updatedCarColor);
-            carColourDTO1.setCarModelId(updatedCarColor.getCarModel().getModelId());
+            carColourDTO1.setModelId(updatedCarColor.getCarModel().getModelId());
             return carColourDTO1;
         } else {
             return null;
