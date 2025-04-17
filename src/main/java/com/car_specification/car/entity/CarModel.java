@@ -27,6 +27,58 @@ public class CarModel {
     @Column(name = "specifications")
     private String specifications;
 
+
+
+    // 🔑 Key Features
+    @Column(name = "engine")
+    private String engine;
+
+    @Column(name = "transmission")
+    private String transmission;
+
+    @Column(name = "infotainment")
+    private String infotainment;
+
+    @Column(name = "safety")
+    private String safety;
+
+    // 🚗 Vehicle Details
+    @Column(name = "fuelType")
+    private String fuelType;
+
+    @Column(name = "bodyType")
+    private String bodyType;
+
+    @Column(name = "seatingCapacity")
+    private int seatingCapacity;
+
+    @Column(name = "colorOptions")
+    private String colorOptions;
+
+    // 💰 Price Details
+    @Column(name = "exShowroomPrice")
+    private Double exShowroomPrice;
+
+    @Column(name = "onRoadPrice")
+    private Double onRoadPrice;
+
+    @Column(name = "insurance")
+    private Double insurance;
+
+    @Column(name = "emiOption")
+    private String emiOption;
+
+    // 🆕 Additional Fields
+
+    @Column(name = "imageUrl")
+    private String imageUrl; // Optional
+
+    @Column(name = "isAvailable")
+    private Boolean isAvailable = true;
+
+
+
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
