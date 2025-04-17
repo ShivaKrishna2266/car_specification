@@ -69,6 +69,35 @@ public class CarModelServiceImpl implements CarModelService {
             carModel.setModelName(carModelDTO.getModelName());
             carModel.setPrice(carModelDTO.getPrice());
             carModel.setSpecifications(carModelDTO.getSpecifications());
+
+            // Key Features
+            carModel.setEngine(carModelDTO.getEngine());
+            carModel.setTransmission(carModelDTO.getTransmission());
+            carModel.setInfotainment(carModelDTO.getInfotainment());
+            carModel.setSafety(carModelDTO.getSafety());
+
+            // Vehicle Details
+            carModel.setFuelType(carModelDTO.getFuelType());
+            carModel.setBodyType(carModelDTO.getBodyType());
+            carModel.setSeatingCapacity(carModelDTO.getSeatingCapacity());
+            carModel.setColorOptions(carModelDTO.getColorOptions());
+
+            // Price Details
+            carModel.setExShowroomPrice(carModelDTO.getExShowroomPrice());
+            carModel.setOnRoadPrice(carModelDTO.getOnRoadPrice());
+            carModel.setInsurance(carModelDTO.getInsurance());
+            carModel.setEmiOption(carModelDTO.getEmiOption());
+
+            // Additional Info
+            carModel.setImageUrl(carModelDTO.getImageUrl());
+            carModel.setIsAvailable(carModelDTO.getIsAvailable());
+
+            carModel.setCreatedBy("System");
+            carModel.setCreatedAt(LocalDateTime.now());
+            carModel.setUpdatedBy("System");
+            carModel.setUpdatedAt(LocalDateTime.now());
+
+
             CarBrand carBrand = carBrandRepository.findById(carModelDTO.getBrandId()).orElse(null);
             if (carBrand != null) {
                 carModel.setCarBrand(carBrand);
