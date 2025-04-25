@@ -2,19 +2,23 @@ package com.car_specification.car.controller;
 
 import com.car_specification.car.dto.CarBrandDTO;
 import com.car_specification.car.dto.CarModelDTO;
+import com.car_specification.car.dto.EventsDTO;
 import com.car_specification.car.dto.RoleDTO;
 import com.car_specification.car.entity.ApiResponse;
 import com.car_specification.car.exception.ApplicationBusinessException;
 import com.car_specification.car.service.CarBrandService;
 import com.car_specification.car.service.CarModelService;
+import com.car_specification.car.service.EventService;
 import com.car_specification.car.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +38,9 @@ public class DataLoaderController {
 
     @Autowired
     private CarModelService carModelService;
+
+    @Autowired
+    private EventService eventService;
 
     @GetMapping("/getAllRoles")
     public ResponseEntity<ApiResponse<List<RoleDTO>>> getAllRoles(){
@@ -138,6 +145,133 @@ public class DataLoaderController {
         }
     }
 
+
+    @GetMapping("/getCarModelById/{modelId}")
+    public ResponseEntity<ApiResponse<CarModelDTO>> getCarModelById(@PathVariable Integer modelId) {
+        ApiResponse<CarModelDTO> response = new ApiResponse<>();
+        CarModelDTO carModelDTO = carModelService.getCarModelById(modelId);
+        if (carModelDTO != null) {
+            response.setStatus(200);
+            response.setMessage("Fetch Record Successfully");
+            response.setData(carModelDTO);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            response.setStatus(500);
+            response.setMessage("Record Not Fetched");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+//==================================EVENTS============================================//
+
+
+    @GetMapping("/getAllEvents")
+    public ResponseEntity<ApiResponse<List<EventsDTO>>> getAllEvents() {
+        ApiResponse<List<EventsDTO>> response = new ApiResponse<>();
+        try {
+            List<EventsDTO> eventsDTOS = eventService.getAllEvents();
+            if (eventsDTOS != null) {
+                response.setStatus(200);
+                response.setMessage("Fetched all events successfully!");
+                response.setData(eventsDTOS);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to fetch all events!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to fetch events!" + ae.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @GetMapping("/getEventById/{eventId}")
+    public ResponseEntity<ApiResponse<EventsDTO>> getEventById(@PathVariable Long eventId) {
+        ApiResponse<EventsDTO> response = new ApiResponse<>();
+        EventsDTO eventsDTO = eventService.getEventById(eventId);
+        if (eventsDTO != null) {
+            response.setStatus(200);
+            response.setMessage("Fetch Record Successfully");
+            response.setData(eventsDTO);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            response.setStatus(500);
+            response.setMessage("Record Not Fetched");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @PostMapping("/addEvents")
+    public ResponseEntity<ApiResponse<EventsDTO>> addEvents(@RequestBody EventsDTO eventsDTO) {
+        ApiResponse<EventsDTO> response = new ApiResponse<>();
+        try {
+            EventsDTO addEvents = eventService.createEvent(eventsDTO);
+            if (addEvents != null) {
+                response.setStatus(200);
+                response.setMessage("Successfully added a carModel!");
+                response.setData(addEvents);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to add a carModel!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to add a carModel!" + ae.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @PutMapping("/updateEvent/{eventId}")
+    public ResponseEntity<ApiResponse<EventsDTO>> updateEvent(@PathVariable Long eventId, @RequestBody EventsDTO eventsDTO) {
+        ApiResponse<EventsDTO> response = new ApiResponse<>();
+        try {
+            EventsDTO updateEvents = eventService.updateEvent(eventId, eventsDTO);
+            if (updateEvents != null) {
+                response.setStatus(200);
+                response.setMessage("Successfully updated a Event!");
+                response.setData(updateEvents);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to update a Event!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to update a Event!" + ae.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/deleteEvent/{eventId}")
+    public ResponseEntity<ApiResponse<Void>> deleteEvent(@PathVariable Long eventId) {
+        ApiResponse<Void> response = new ApiResponse<>();
+        try {
+            eventService.deleteEventById(eventId);
+            if (eventId != null) {
+                response.setStatus(200);
+                response.setMessage("Successfully deleted a event!");
+                response.setData(null);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to delete a event!");
+                response.setData(null);
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to delete a event!" + ae.getMessage());
+            response.setData(null);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
 }
