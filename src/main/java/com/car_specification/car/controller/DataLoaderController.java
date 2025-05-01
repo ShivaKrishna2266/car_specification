@@ -2,12 +2,14 @@ package com.car_specification.car.controller;
 
 import com.car_specification.car.dto.CarBrandDTO;
 import com.car_specification.car.dto.CarModelDTO;
+import com.car_specification.car.dto.EventRegisterDTO;
 import com.car_specification.car.dto.EventsDTO;
 import com.car_specification.car.dto.RoleDTO;
 import com.car_specification.car.entity.ApiResponse;
 import com.car_specification.car.exception.ApplicationBusinessException;
 import com.car_specification.car.service.CarBrandService;
 import com.car_specification.car.service.CarModelService;
+import com.car_specification.car.service.EventRegisterServices;
 import com.car_specification.car.service.EventService;
 import com.car_specification.car.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,9 @@ public class DataLoaderController {
 
     @Autowired
     private EventService eventService;
+
+    @Autowired
+    private EventRegisterServices eventRegisterServices;
 
     @GetMapping("/getAllRoles")
     public ResponseEntity<ApiResponse<List<RoleDTO>>> getAllRoles(){
@@ -273,5 +278,48 @@ public class DataLoaderController {
         }
     }
 
+//    =========================EVENT REGISTER==========================//
 
+
+
+
+    @GetMapping("/getAllEventRegisters")
+    public ResponseEntity<ApiResponse<List<EventRegisterDTO>>>getAllEventRegisters(){
+        ApiResponse<List<EventRegisterDTO>> response = new ApiResponse<>();
+            List<EventRegisterDTO> eventsDTOS = eventRegisterServices.getAllEventRegisters();
+            if (eventsDTOS != null) {
+                response.setStatus(200);
+                response.setMessage("Fetched all events successfully!");
+                response.setData(eventsDTOS);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to fetch all events!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+    }
+
+
+    @PostMapping("/addEventRegister")
+    public ResponseEntity<ApiResponse<EventRegisterDTO>> addEventRegister(@RequestBody EventRegisterDTO eventRegisterDTO) {
+
+        ApiResponse<EventRegisterDTO> response = new ApiResponse<>();
+        try {
+            EventRegisterDTO addEventRegister = eventRegisterServices.createEventRegister(eventRegisterDTO);
+            if (addEventRegister != null) {
+                response.setStatus(200);
+                response.setMessage("Successfully added a EventRegisters!");
+                response.setData(addEventRegister);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to add a EventRegisters!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to add a EventRegisters!" + ae.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
