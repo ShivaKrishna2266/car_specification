@@ -19,4 +19,6 @@ public interface UserService {
 
     void deleteUserById(Integer userId);
 
+
+    List<UserDTO> getUserByEventId(Long eventId);
 }

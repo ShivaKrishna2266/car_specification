@@ -2,12 +2,16 @@ package com.car_specification.car.service.impl;
 
 import com.car_specification.car.dto.CarBrandDTO;
 import com.car_specification.car.dto.EventsDTO;
+import com.car_specification.car.dto.UserDTO;
 import com.car_specification.car.entity.CarBrand;
 import com.car_specification.car.entity.Events;
+import com.car_specification.car.entity.User;
 import com.car_specification.car.exception.ApplicationBusinessException;
 import com.car_specification.car.mapper.CarBrandMapper;
 import com.car_specification.car.mapper.EventsMapper;
+import com.car_specification.car.mapper.UserMapper;
 import com.car_specification.car.repository.EventRepository;
+import com.car_specification.car.repository.UserRepository;
 import com.car_specification.car.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +26,12 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private EventRepository eventRepository;
+
+
+    @Autowired
+    private UserRepository userRepository;
+
+
     @Override
     public List<EventsDTO> getAllEvents() {
         List<Events> eventsDTOs = eventRepository.findAll();

@@ -461,7 +461,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/events/{userId}")
+      @GetMapping("/events/{userId}")
     public ResponseEntity<EventsDTO> getEventByUserId(@PathVariable Long userId) {
         EventsDTO event = eventService.getEventByUserId(userId);
         if (event != null) {
@@ -470,6 +470,30 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/getUsersByEvent/{eventId}")
+    public ResponseEntity<ApiResponse<List<UserDTO>>> getUsersByEventId(@PathVariable Long eventId) {
+        ApiResponse<List<UserDTO>> response = new ApiResponse<>();
+        try {
+            List<UserDTO> users = userService.getUserByEventId(eventId);
+            if (users != null && !users.isEmpty()) {
+                response.setStatus(200);
+                response.setMessage("Fetched users registered for the event successfully");
+                response.setData(users);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(404);
+                response.setMessage("No users found for this event");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            response.setStatus(500);
+            response.setMessage("Error fetching users by event ID: " + e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 
 }
 
