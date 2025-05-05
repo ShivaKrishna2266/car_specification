@@ -2,6 +2,7 @@ package com.car_specification.car.service;
 
 
 import com.car_specification.car.dto.EventsDTO;
+import com.car_specification.car.dto.UserDTO;
 import com.car_specification.car.exception.ApplicationBusinessException;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface EventService {
     Void deleteEventById(Long eventId);
 
     EventsDTO getEventByUserId (Long userId);
+
+
 }

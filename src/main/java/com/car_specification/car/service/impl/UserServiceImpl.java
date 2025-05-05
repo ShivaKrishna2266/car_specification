@@ -1,9 +1,12 @@
 package com.car_specification.car.service.impl;
 
+import com.car_specification.car.dto.EventsDTO;
 import com.car_specification.car.dto.UserDTO;
+import com.car_specification.car.entity.Events;
 import com.car_specification.car.entity.Feedback;
 import com.car_specification.car.entity.User;
 import com.car_specification.car.exception.ApplicationBusinessException;
+import com.car_specification.car.mapper.EventsMapper;
 import com.car_specification.car.mapper.FeedbackMapper;
 import com.car_specification.car.mapper.UserMapper;
 import com.car_specification.car.repository.UserRepository;
@@ -12,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,8 +28,10 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Override
     public List<UserDTO> findAll() {
-        List<User> users = userRepository.findAll();
-        return users.stream().map(u -> UserMapper.convertToDTO(u)).collect(Collectors.toList());
+        List<User> users = userRepository.findAllUsersWithEvent(); // fetch users with non-null eventId
+        return users.stream()
+                .map(UserMapper::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -72,4 +78,21 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(Integer userId) {
 
     }
+
+
+    @Override
+    public List<UserDTO> getUserByEventId(Long eventId) {
+        // Fetch list of users associated with the event
+        List<User> users = userRepository.findByEvents_EventId(eventId);
+
+        if (users != null && !users.isEmpty()) {
+            return users.stream()
+                    .map(UserMapper::convertToDTO)
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+
 }
