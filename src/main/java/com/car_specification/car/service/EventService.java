@@ -17,4 +17,6 @@ public interface EventService {
     EventsDTO updateEvent(Long eventId, EventsDTO eventsDTO);
 
     Void deleteEventById(Long eventId);
+
+    EventsDTO getEventByUserId (Long userId);
 }

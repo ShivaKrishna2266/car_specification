@@ -21,40 +21,51 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil {
+
     @Value("${jwt.token.validity}")
-    public long TOKEN_VALIDITY;
+    private long TOKEN_VALIDITY;
 
     @Value("${jwt.signing.key}")
-    public String SIGNING_KEY;
+    private String SIGNING_KEY;
 
     @Value("${jwt.authorities.key}")
-    public String AUTHORITIES_KEY;
+    private String AUTHORITIES_KEY;
 
+    // Extract the username (subject) from the token
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
+    // Extract the expiration date from the token
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
+    // Extract specific claims from the token
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
 
+    // Parse all claims from the token
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(SIGNING_KEY)
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parser()
+                    .setSigningKey(SIGNING_KEY)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid JWT token", e);  // Consider logging this exception
+        }
     }
 
+    // Check if the token is expired
     private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
 
+    // Generate a new JWT token for a user
     public String generateToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -64,20 +75,23 @@ public class JwtUtil {
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY*1000))
+                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS256, SIGNING_KEY)
                 .compact();
     }
 
+    // Validate if the token is valid for the user
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    UsernamePasswordAuthenticationToken getAuthenticationToken(final String token, final Authentication existingAuth, final UserDetails userDetails) {
+    // Extract authentication information from the JWT token
+    public UsernamePasswordAuthenticationToken getAuthenticationToken(final String token, final Authentication existingAuth, final UserDetails userDetails) {
         final JwtParser jwtParser = Jwts.parser().setSigningKey(SIGNING_KEY);
         final Jws<Claims> claimsJws = jwtParser.parseClaimsJws(token);
         final Claims claims = claimsJws.getBody();
+
         final Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
@@ -85,5 +99,4 @@ public class JwtUtil {
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
-
 }

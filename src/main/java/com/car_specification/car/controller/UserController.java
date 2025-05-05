@@ -2,15 +2,20 @@ package com.car_specification.car.controller;
 
 import com.car_specification.car.dto.CarBrandDTO;
 import com.car_specification.car.dto.CarModelDTO;
+import com.car_specification.car.dto.EventsDTO;
 import com.car_specification.car.dto.FeedbackDTO;
+import com.car_specification.car.dto.UserDTO;
 import com.car_specification.car.entity.ApiResponse;
 import com.car_specification.car.exception.ApplicationBusinessException;
 import com.car_specification.car.service.CarBrandService;
 import com.car_specification.car.service.CarModelService;
+import com.car_specification.car.service.EventService;
 import com.car_specification.car.service.FeedbackService;
+import com.car_specification.car.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +26,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -35,6 +42,12 @@ public class UserController {
 
     @Autowired
     private CarModelService carModelService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private EventService eventService;
 
     @GetMapping("/getAllFeedbacks")
     public ResponseEntity<ApiResponse<List<FeedbackDTO>>> getAllFeedbacks(){
@@ -348,5 +361,115 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+//    ==================USER==============================//
+
+    @GetMapping("/getAllUser")
+    public ResponseEntity<ApiResponse<List<UserDTO>>> getAllUser() {
+        ApiResponse<List<UserDTO>> response = new ApiResponse<>();
+        try {
+            List<UserDTO> userDTOS = userService.findAll();
+            if (userDTOS != null) {
+                response.setStatus(200);
+                response.setMessage("Fetched all Users successfully!");
+                response.setData(userDTOS);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to fetch all Users!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to fetch User!" + ae.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @GetMapping("/getUserById/{userId}")
+    public ResponseEntity<ApiResponse<UserDTO>> getUserById(@PathVariable Integer userId){
+        ApiResponse<UserDTO>  response = new ApiResponse<>();
+        UserDTO userDTOs = userService.getUserById(userId);
+        if (userDTOs != null){
+            response.setStatus(200);
+            response.setMessage("Fetch User By Id Data Successfully");
+            response.setData(userDTOs);
+            return  new ResponseEntity<>(response, HttpStatus.OK);
+        }else {
+            response.setStatus(500);
+            response.setMessage("Failed To Fetch User By Id Data");
+            return  new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
+    @GetMapping("/getUserByUsername/{username}")
+    public ResponseEntity<ApiResponse<UserDTO>> getUserByUsername(@PathVariable String username){
+        ApiResponse<UserDTO> response = new ApiResponse<>();
+        UserDTO userDTO = userService.getUserByUsername(username);
+        if (userDTO != null){
+            response.setStatus(200);
+            response.setMessage("Fetched user by username successfully");
+            response.setData(userDTO);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            response.setStatus(404);
+            response.setMessage("User not found");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
+//==================EVENTS===================================//
+    @GetMapping("/getAllEvents")
+    public ResponseEntity<ApiResponse<List<EventsDTO>>> getAllEvents() {
+        ApiResponse<List<EventsDTO>> response = new ApiResponse<>();
+        try {
+            List<EventsDTO> eventsDTOS = eventService.getAllEvents();
+            if (eventsDTOS != null) {
+                response.setStatus(200);
+                response.setMessage("Fetched all events successfully!");
+                response.setData(eventsDTOS);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to fetch all events!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to fetch events!" + ae.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/getEventById/{eventId}")
+    public ResponseEntity<ApiResponse<EventsDTO>> getEventById(@PathVariable Long eventId) {
+        ApiResponse<EventsDTO> response = new ApiResponse<>();
+        EventsDTO eventsDTO = eventService.getEventById(eventId);
+        if (eventsDTO != null) {
+            response.setStatus(200);
+            response.setMessage("Fetch Record Successfully");
+            response.setData(eventsDTO);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            response.setStatus(500);
+            response.setMessage("Record Not Fetched");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @GetMapping("/events/{userId}")
+    public ResponseEntity<EventsDTO> getEventByUserId(@PathVariable Long userId) {
+        EventsDTO event = eventService.getEventByUserId(userId);
+        if (event != null) {
+            return ResponseEntity.ok(event);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
 

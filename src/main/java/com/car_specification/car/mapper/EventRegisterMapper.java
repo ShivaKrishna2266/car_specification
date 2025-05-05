@@ -12,9 +12,9 @@ public class EventRegisterMapper {
         EventRegisterDTO eventRegisterDTO =new EventRegisterDTO();
         BeanUtils.copyProperties(eventRegister,eventRegisterDTO);
 
-//        if (eventRegister.getEvents() != null) {
-//            eventRegisterDTO.setEventId(eventRegister.getEvents().getEventId());
-//        }
+        if (eventRegister.getEvents() != null) {
+            eventRegisterDTO.setEventId(eventRegister.getEvents().getEventId());
+        }
         return eventRegisterDTO;
     }
     public static EventRegister convertToEntity(EventRegisterDTO eventRegisterDTO){

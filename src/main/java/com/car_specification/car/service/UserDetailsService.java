@@ -6,17 +6,19 @@ import com.car_specification.car.dto.UserRegistrationDTO;
 import com.car_specification.car.entity.Role;
 import com.car_specification.car.entity.User;
 import com.car_specification.car.entity.UserProfile;
+import com.car_specification.car.repository.EventRepository;
 import com.car_specification.car.repository.UserProfileRepository;
 import com.car_specification.car.repository.UserRepository;
-import com.car_specification.car.service.impl.RoleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsService {
@@ -32,12 +34,22 @@ public class UserDetailsService {
     @Autowired
     private UserProfileRepository userProfileRepository;
 
+    @Autowired
+    private EventRepository eventRepository;
+
     public UserDTO registerUser(UserDTO request) {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setMobile(request.getMobile());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        // Set event only if eventId is not null
+        if (request.getEventId() != null) {
+            eventRepository.findById(request.getEventId())
+                    .ifPresent(user::setEvents);
+        }
+
         Role adminRole = roleService.findByRoleName(request.getRole());
         if (adminRole == null) {
             throw new RuntimeException("Admin role not found");
@@ -58,6 +70,12 @@ public class UserDetailsService {
         userProfile.setCreatedAt(LocalDateTime.now());
         userProfile.setUpdatedAt(LocalDateTime.now());
 
+        // Set event only if eventId is not null
+        if (request.getEventId() != null) {
+            eventRepository.findById(request.getEventId())
+                    .ifPresent(userProfile::setEvents);
+        }
+
         userProfileRepository.save(userProfile);
         return request;
 
@@ -75,5 +93,23 @@ public class UserDetailsService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
+
+    public List<UserRegistrationDTO> getUsersByEventId(Long eventId) {
+        List<User> users = userRepository.findByEvents_EventId(eventId);
+        return users.stream()
+                .map(user -> {
+                    UserRegistrationDTO dto = new UserRegistrationDTO();
+                    dto.setUsername(user.getUsername());
+                    dto.setEmail(user.getEmail());
+                    dto.setMobile(user.getMobile());
+                    dto.setEventId(user.getEvents().getEventId());
+                    dto.setRegistrationDate(user.getEvents().getDate());
+                    // set others if needed
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
 }
 

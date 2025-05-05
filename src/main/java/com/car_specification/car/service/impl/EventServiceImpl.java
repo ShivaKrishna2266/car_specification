@@ -82,4 +82,16 @@ public class EventServiceImpl implements EventService {
             eventRepository.deleteById(eventId);
         return null;
     }
+
+    @Override
+    public EventsDTO getEventByUserId(Long userId) {
+        Optional<Events> optionalEvents = eventRepository.findByUser_UserId(userId);
+        if (optionalEvents.isPresent()) {
+            Events events = optionalEvents.get();
+            return EventsMapper.convertToDTO(events);
+        } else {
+            return null;
+        }
+    }
+
 }
