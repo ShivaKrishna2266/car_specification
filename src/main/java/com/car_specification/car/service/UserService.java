@@ -11,6 +11,8 @@ public interface UserService {
 
     UserDTO getUserById(Integer userId);
 
+    UserDTO getUserByUsername(String username);
+
     UserDTO createUser(UserDTO userDTO) throws ApplicationBusinessException;
 
     UserDTO updateUser(Integer userId, UserDTO userDTO);

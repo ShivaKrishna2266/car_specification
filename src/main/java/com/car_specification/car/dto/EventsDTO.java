@@ -33,4 +33,8 @@ public class EventsDTO {
     private String bannerVideo;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    private Long userId;
+
+
 }

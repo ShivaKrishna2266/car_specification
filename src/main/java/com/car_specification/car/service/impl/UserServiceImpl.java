@@ -38,6 +38,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO getUserByUsername(String username){
+
+        Optional<User> users= userRepository.findByUsername(username);
+        if(users.isPresent()){
+            return  UserMapper.convertToDTO(users.get());
+        }
+        return null;
+    }
+
+
+    @Override
     public UserDTO createUser(UserDTO userDTO) throws ApplicationBusinessException {
         try{
             User convertToEntity = UserMapper.convertToEntity(userDTO);

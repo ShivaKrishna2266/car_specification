@@ -5,6 +5,7 @@ import com.car_specification.car.dto.CarModelDTO;
 import com.car_specification.car.dto.EventRegisterDTO;
 import com.car_specification.car.dto.EventsDTO;
 import com.car_specification.car.dto.RoleDTO;
+import com.car_specification.car.dto.UserRegistrationDTO;
 import com.car_specification.car.entity.ApiResponse;
 import com.car_specification.car.exception.ApplicationBusinessException;
 import com.car_specification.car.service.CarBrandService;
@@ -12,6 +13,7 @@ import com.car_specification.car.service.CarModelService;
 import com.car_specification.car.service.EventRegisterServices;
 import com.car_specification.car.service.EventService;
 import com.car_specification.car.service.RoleService;
+import com.car_specification.car.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -46,6 +50,9 @@ public class DataLoaderController {
 
     @Autowired
     private EventRegisterServices eventRegisterServices;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @GetMapping("/getAllRoles")
     public ResponseEntity<ApiResponse<List<RoleDTO>>> getAllRoles(){
@@ -321,5 +328,17 @@ public class DataLoaderController {
             response.setMessage("Unable to add a EventRegisters!" + ae.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/getUsersByEventId/{eventId}")
+    public ResponseEntity<Map<String, Object>> getUsersByEventId(@PathVariable Long eventId) {
+        // Get the list of registered users for the event
+        List<UserRegistrationDTO> users = userDetailsService.getUsersByEventId(eventId);
+
+        // Prepare the response
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", users);  // Add users list to the response body
+
+        return ResponseEntity.ok(response);  // Return the response with status 200 OK
     }
 }

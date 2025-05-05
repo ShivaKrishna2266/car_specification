@@ -50,9 +50,8 @@ public class EventRegisterServicesImpl implements EventRegisterServices {
             eventRegister.setUpdatedBy("System");
             eventRegister.setUpdatedAt(LocalDateTime.now());
 
-            if (eventRegister.getEvents() != null) {
-                eventRegisterDTO.setEventId(eventRegister.getEvents().getEventId());
-            }
+            Events events = eventRepository.findById(eventRegisterDTO.getEventId()) .orElseThrow(() -> new RuntimeException("Event not found"));
+            eventRegister.setEvents(events);
 
             EventRegister savedEventregister = eventRegisterRepository.save(eventRegister);
             EventRegisterDTO eventRegisterDTO1 = EventRegisterMapper.convertToDTO(savedEventregister);

@@ -21,4 +21,6 @@ public class UserDTO {
     private LocalDateTime createdAt;
     private String updatedBy;
     private LocalDateTime updatedAt;
+
+    private Long eventId;
 }

@@ -4,6 +4,7 @@ import com.car_specification.car.dto.AppointmentDTO;
 import com.car_specification.car.dto.CarBrandDTO;
 import com.car_specification.car.dto.CarColourDTO;
 import com.car_specification.car.dto.CarModelDTO;
+import com.car_specification.car.dto.EventsDTO;
 import com.car_specification.car.dto.FeedbackDTO;
 import com.car_specification.car.entity.ApiResponse;
 import com.car_specification.car.exception.ApplicationBusinessException;
@@ -11,6 +12,7 @@ import com.car_specification.car.service.AppointmentService;
 import com.car_specification.car.service.CarBrandService;
 import com.car_specification.car.service.CarColourService;
 import com.car_specification.car.service.CarModelService;
+import com.car_specification.car.service.EventService;
 import com.car_specification.car.service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,6 +42,9 @@ public class AdminController {
     private FeedbackService feedbackService;
     @Autowired
     private CarColourService carColourService;
+
+    @Autowired
+    private EventService eventService;
 
     //    ================================CarModels==================================
 
@@ -560,6 +565,32 @@ public class AdminController {
             response.setStatus(500);
             response.setMessage("Unable to delete a carColor!" + ae.getMessage());
             response.setData(null);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+//    =================EVENTS===================================//
+
+
+
+    @GetMapping("/getAllEvents")
+    public ResponseEntity<ApiResponse<List<EventsDTO>>> getAllEvents() {
+        ApiResponse<List<EventsDTO>> response = new ApiResponse<>();
+        try {
+            List<EventsDTO> eventsDTOS = eventService.getAllEvents();
+            if (eventsDTOS != null) {
+                response.setStatus(200);
+                response.setMessage("Fetched all events successfully!");
+                response.setData(eventsDTOS);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.setStatus(500);
+                response.setMessage("Failed to fetch all events!");
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (ApplicationBusinessException ae) {
+            response.setStatus(500);
+            response.setMessage("Unable to fetch events!" + ae.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
