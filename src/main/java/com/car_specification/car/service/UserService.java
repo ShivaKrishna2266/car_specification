@@ -21,4 +21,6 @@ public interface UserService {
 
 
     List<UserDTO> getUserByEventId(Long eventId);
+
+    boolean isUserRegistered(String email, Long eventId);
 }
