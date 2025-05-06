@@ -1,16 +1,14 @@
 package com.car_specification.car.service.impl;
 
-import com.car_specification.car.dto.CarModelDTO;
 import com.car_specification.car.dto.EventRegisterDTO;
-import com.car_specification.car.entity.CarBrand;
-import com.car_specification.car.entity.CarModel;
 import com.car_specification.car.entity.EventRegister;
 import com.car_specification.car.entity.Events;
+import com.car_specification.car.entity.User;
 import com.car_specification.car.exception.ApplicationBusinessException;
-import com.car_specification.car.mapper.CarModelMapper;
 import com.car_specification.car.mapper.EventRegisterMapper;
 import com.car_specification.car.repository.EventRegisterRepository;
 import com.car_specification.car.repository.EventRepository;
+import com.car_specification.car.repository.UserRepository;
 import com.car_specification.car.service.EventRegisterServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +26,12 @@ public class EventRegisterServicesImpl implements EventRegisterServices {
 
     @Autowired
     private EventRepository eventRepository;
+
+
+    @Autowired
+    private UserRepository userRepository;
+
+
     @Override
     public List<EventRegisterDTO> getAllEventRegisters() {
         return eventRegisterRepository.findAll()
@@ -70,5 +74,34 @@ public class EventRegisterServicesImpl implements EventRegisterServices {
     @Override
     public Void deleteEventRegisterById(Long eventRegisterId) {
         return null;
+    }
+
+    @Override
+    public boolean isUserRegistered(Integer userId, Long eventId) {
+        return eventRegisterRepository.existsByUser_UserIdAndEvents_EventId(userId, eventId);
+    }
+
+    @Override
+    public String registerUserForEvent(EventRegisterDTO eventRegisterDTO) {
+        if (isUserRegistered(eventRegisterDTO.getUserId(), eventRegisterDTO.getEventId())) {
+            return "User already registered";
+        }
+
+        User user = userRepository.findById(eventRegisterDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Events event = eventRepository.findById(eventRegisterDTO.getEventId())
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+
+        EventRegister registration = new EventRegister();
+        registration.setUser(user);
+        registration.setEvents(event);
+        registration.setDate(LocalDateTime.now());
+        registration.setCreatedAt(LocalDateTime.now());
+        registration.setUpdatedAt(LocalDateTime.now());
+        registration.setCreatedBy("System");
+        registration.setUpdatedBy("System");
+
+        eventRegisterRepository.save(registration);
+        return "User registered successfully";
     }
 }

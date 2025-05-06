@@ -2,6 +2,7 @@ package com.car_specification.car.controller;
 
 import com.car_specification.car.dto.CarBrandDTO;
 import com.car_specification.car.dto.CarModelDTO;
+import com.car_specification.car.dto.EventRegisterDTO;
 import com.car_specification.car.dto.EventsDTO;
 import com.car_specification.car.dto.FeedbackDTO;
 import com.car_specification.car.dto.UserDTO;
@@ -9,8 +10,10 @@ import com.car_specification.car.entity.ApiResponse;
 import com.car_specification.car.exception.ApplicationBusinessException;
 import com.car_specification.car.service.CarBrandService;
 import com.car_specification.car.service.CarModelService;
+import com.car_specification.car.service.EventRegisterServices;
 import com.car_specification.car.service.EventService;
 import com.car_specification.car.service.FeedbackService;
+import com.car_specification.car.service.UserDetailsService;
 import com.car_specification.car.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,8 +27,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +53,12 @@ public class UserController {
 
     @Autowired
     private EventService eventService;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private EventRegisterServices eventRegisterServices;
 
     @GetMapping("/getAllFeedbacks")
     public ResponseEntity<ApiResponse<List<FeedbackDTO>>> getAllFeedbacks(){
@@ -494,6 +505,62 @@ public class UserController {
     }
 
 
+//    @PostMapping("/registerOrJoinEvent")
+//    public ResponseEntity<String> registerOrJoinEvent(@RequestBody UserDTO userDTO) {
+//        if (userDTO.getUserId() != null) {
+//            // Case: Existing user, only associate with event
+//            userDetailsService.registerExistingUserForEvent(userDTO.getUserId(), userDTO.getEventId());
+//            return ResponseEntity.ok("Existing user registered for event.");
+//        } else {
+//            // Case: New user, full registration
+//            userDetailsService.registerUser(userDTO);
+//            return ResponseEntity.ok("New user registered and assigned to event.");
+//        }
+//    }
+
+
+    @GetMapping("/checkRegistration")
+    public ResponseEntity<?> checkUserRegistration(@RequestParam Integer userId, @RequestParam Long eventId) {
+        boolean isRegistered = userDetailsService.checkUserRegistration(userId, eventId);
+        return ResponseEntity.ok().body(new RegistrationStatusResponse(isRegistered));
+    }
+
+    // Inner class to structure response
+    public static class RegistrationStatusResponse {
+        private boolean isRegistered;
+
+        public RegistrationStatusResponse(boolean isRegistered) {
+            this.isRegistered = isRegistered;
+        }
+
+        public boolean isRegistered() {
+            return isRegistered;
+        }
+
+        public void setRegistered(boolean isRegistered) {
+            this.isRegistered = isRegistered;
+        }
+    }
+
+
+
+    @PostMapping("/registerEvent")
+    public ResponseEntity<Map<String, String>> registerForEvent(@RequestBody EventRegisterDTO dto) {
+        try {
+            String message = eventRegisterServices.registerUserForEvent(dto);
+            return ResponseEntity.ok(Collections.singletonMap("message", message));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/checkRegistrations")
+    public ResponseEntity<EventRegisterDTO> checkRegistration(
+            @RequestParam Integer userId,
+            @RequestParam Long eventId) {
+        boolean isRegistered = eventRegisterServices.isUserRegistered(userId, eventId);
+        return ResponseEntity.ok(new EventRegisterDTO(isRegistered));
+    }
 
 }
 

@@ -111,5 +111,40 @@ public class UserDetailsService {
                 .collect(Collectors.toList());
     }
 
+
+
+    public boolean checkUserRegistration(Integer userId, Long eventId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            throw new RuntimeException("User not found.");
+        }
+
+        User user = userOptional.get();
+
+        // Handle null to avoid NullPointerException
+        if (user.getEvents() == null) {
+            return false;
+        }
+
+        return user.getEvents().getEventId().equals(eventId);
+    }
+
+
+
+
+    // Method to check if user is registered for the event
+//    public boolean checkUserRegistration(Integer userId, Long eventId) {
+//        Optional<User> userOptional = userRepository.findById(userId);
+//
+//        if (userOptional.isPresent()) {
+//            User user = userOptional.get();
+//            return user.getEvents().stream()
+//                    .anyMatch(event -> event.getEventId().equals(eventId));  // Check if eventId is associated with the user
+//        }
+//
+//        return false;  // User not found or not registered for event
+//    }
+
+
 }
 

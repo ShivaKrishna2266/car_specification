@@ -2,6 +2,7 @@ package com.car_specification.car.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,8 +28,8 @@ public class EventRegister {
     @Column(name = "event_register_id")
     private Long eventRegisterId;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "username")
+    private String username;
 
     @Column(name = "email")
     private String email;
@@ -40,7 +41,7 @@ public class EventRegister {
     private String gender;
 
     @Column(name = "date")
-    private Timestamp date;
+    private LocalDateTime date;
 
     @Column(name = "ticket")
     private String ticket;
@@ -60,7 +61,15 @@ public class EventRegister {
     @Column(name = "updated_by")
     private String updatedBy;
 
-    @ManyToOne
+
+    @Column(name = "is_registered")
+    private boolean isRegistered;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private Events events;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

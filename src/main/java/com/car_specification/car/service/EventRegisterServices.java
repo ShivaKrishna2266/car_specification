@@ -16,4 +16,7 @@ public interface EventRegisterServices {
     EventRegisterDTO updateEventRegister(Long eventRegisterId, EventRegisterDTO eventRegisterDTO);
 
     Void deleteEventRegisterById(Long eventRegisterId);
+
+    boolean isUserRegistered(Integer userId, Long eventId);
+    String registerUserForEvent(EventRegisterDTO eventRegisterDTO);
 }

@@ -22,6 +22,13 @@ public class EventRegisterDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String createdBy;
+    private boolean isRegistered;
 
     private Long eventId;
+    private Integer userId;
+    private String username;
+
+    public EventRegisterDTO(boolean isRegistered) {
+        this.isRegistered = isRegistered;
+    }
 }

@@ -2,6 +2,7 @@ package com.car_specification.car.controller;
 
 import com.car_specification.car.dto.CarBrandDTO;
 import com.car_specification.car.dto.CarModelDTO;
+import com.car_specification.car.dto.ContactUsDTO;
 import com.car_specification.car.dto.EventRegisterDTO;
 import com.car_specification.car.dto.EventsDTO;
 import com.car_specification.car.dto.RoleDTO;
@@ -10,6 +11,7 @@ import com.car_specification.car.entity.ApiResponse;
 import com.car_specification.car.exception.ApplicationBusinessException;
 import com.car_specification.car.service.CarBrandService;
 import com.car_specification.car.service.CarModelService;
+import com.car_specification.car.service.ContactUsService;
 import com.car_specification.car.service.EventRegisterServices;
 import com.car_specification.car.service.EventService;
 import com.car_specification.car.service.RoleService;
@@ -53,6 +55,8 @@ public class DataLoaderController {
 
     @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
+    private ContactUsService contactUsService;
 
     @GetMapping("/getAllRoles")
     public ResponseEntity<ApiResponse<List<RoleDTO>>> getAllRoles(){
@@ -340,5 +344,19 @@ public class DataLoaderController {
         response.put("data", users);  // Add users list to the response body
 
         return ResponseEntity.ok(response);  // Return the response with status 200 OK
+    }
+
+
+
+    @PostMapping("/createContactUs")
+    public ResponseEntity<ContactUsDTO> createContact(@RequestBody ContactUsDTO dto) throws ApplicationBusinessException {
+        ContactUsDTO created = contactUsService.createContact(dto);
+        return ResponseEntity.ok(created);
+    }
+
+    // ✅ Get All Contacts
+    @GetMapping("/getAllContactUs")
+    public ResponseEntity<List<ContactUsDTO>> getAllContacts() {
+        return ResponseEntity.ok(contactUsService.getAllContacts());
     }
 }

@@ -1,14 +1,13 @@
 package com.car_specification.car.service.impl;
 
+
 import com.car_specification.car.dto.EventsDTO;
 import com.car_specification.car.dto.UserDTO;
 import com.car_specification.car.entity.Events;
-import com.car_specification.car.entity.Feedback;
 import com.car_specification.car.entity.User;
 import com.car_specification.car.exception.ApplicationBusinessException;
-import com.car_specification.car.mapper.EventsMapper;
-import com.car_specification.car.mapper.FeedbackMapper;
 import com.car_specification.car.mapper.UserMapper;
+import com.car_specification.car.repository.EventRepository;
 import com.car_specification.car.repository.UserRepository;
 import com.car_specification.car.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,11 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EventRepository eventRepository;
+
+
     @Override
     public List<UserDTO> findAll() {
         List<User> users = userRepository.findAllUsersWithEvent(); // fetch users with non-null eventId
@@ -92,6 +96,13 @@ public class UserServiceImpl implements UserService {
         } else {
             return Collections.emptyList();
         }
+    }
+
+    @Override
+    public boolean isUserRegistered(String email, Long eventId) {
+        Optional<Events> eventsDTO = eventRepository.findById(eventId);
+        if (eventsDTO.isEmpty()) return false;
+        return userRepository.findByEmailAndEvents(email, eventsDTO.get()).isPresent();
     }
 
 
