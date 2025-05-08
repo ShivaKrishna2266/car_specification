@@ -22,5 +22,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findAllUsersWithEvent();
 
     Optional<User> findByEmailAndEvents(String email, Events events);
+
+    boolean existsByUsername(String username);
 }
 

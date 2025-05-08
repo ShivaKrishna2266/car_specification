@@ -19,4 +19,9 @@ public interface EventRegisterServices {
 
     boolean isUserRegistered(Integer userId, Long eventId);
     String registerUserForEvent(EventRegisterDTO eventRegisterDTO);
+
+
+    List<EventRegisterDTO> getRegisteredUsersByEventId(Long eventId);
+
+    List<EventRegisterDTO> findRegisteredEventsByUserId(Integer userId);
 }

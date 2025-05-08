@@ -1,19 +1,10 @@
 package com.car_specification.car.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
@@ -34,8 +25,8 @@ public class EventRegister {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    @Column(name = "mobile")
+    private String mobile;
 
     @Column(name = "gender")
     private String gender;
@@ -61,9 +52,9 @@ public class EventRegister {
     @Column(name = "updated_by")
     private String updatedBy;
 
-
     @Column(name = "is_registered")
-    private boolean isRegistered;
+    private Boolean isRegistered;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")

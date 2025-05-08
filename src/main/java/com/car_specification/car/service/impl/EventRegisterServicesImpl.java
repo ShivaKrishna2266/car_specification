@@ -45,6 +45,7 @@ public class EventRegisterServicesImpl implements EventRegisterServices {
         return null;
     }
 
+
     @Override
     public EventRegisterDTO createEventRegister(EventRegisterDTO eventRegisterDTO) throws ApplicationBusinessException {
         try {
@@ -104,4 +105,15 @@ public class EventRegisterServicesImpl implements EventRegisterServices {
         eventRegisterRepository.save(registration);
         return "User registered successfully";
     }
+
+    @Override
+    public List<EventRegisterDTO> getRegisteredUsersByEventId(Long eventId) {
+        return eventRegisterRepository.findRegisteredUsersByEventId(eventId);
+    }
+
+    @Override
+    public List<EventRegisterDTO> findRegisteredEventsByUserId(Integer userId) {
+        return eventRegisterRepository.findRegisteredEventsByUserId(userId);
+    }
+
 }
