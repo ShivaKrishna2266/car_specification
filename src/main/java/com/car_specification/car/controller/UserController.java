@@ -18,7 +18,6 @@ import com.car_specification.car.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -472,15 +470,15 @@ public class UserController {
     }
 
 
-      @GetMapping("/events/{userId}")
-    public ResponseEntity<EventsDTO> getEventByUserId(@PathVariable Long userId) {
-        EventsDTO event = eventService.getEventByUserId(userId);
-        if (event != null) {
-            return ResponseEntity.ok(event);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//      @GetMapping("/events/{userId}")
+//    public ResponseEntity<EventsDTO> getEventByUserId(@PathVariable Long userId) {
+//        EventsDTO event = eventService.getEventByUserId(userId);
+//        if (event != null) {
+//            return ResponseEntity.ok(event);
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
     @GetMapping("/getUsersByEvent/{eventId}")
     public ResponseEntity<ApiResponse<List<UserDTO>>> getUsersByEventId(@PathVariable Long eventId) {
@@ -559,7 +557,25 @@ public class UserController {
             @RequestParam Integer userId,
             @RequestParam Long eventId) {
         boolean isRegistered = eventRegisterServices.isUserRegistered(userId, eventId);
-        return ResponseEntity.ok(new EventRegisterDTO(isRegistered));
+        return ResponseEntity.ok(new EventRegisterDTO(isRegistered));  // This now works
+    }
+
+
+    @GetMapping("/getEventsByUserId/{userId}")
+    public ResponseEntity<ApiResponse<List<EventRegisterDTO>>> getEventsByUser(@PathVariable Integer userId) {
+        ApiResponse<List<EventRegisterDTO>> response = new ApiResponse<>();
+        List<EventRegisterDTO> registeredUsers = eventRegisterServices.findRegisteredEventsByUserId(userId);
+
+        if (registeredUsers != null && !registeredUsers.isEmpty()) {
+            response.setStatus(200);
+            response.setMessage("Users fetched successfully");
+            response.setData(registeredUsers);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            response.setStatus(404);
+            response.setMessage("No users found for this event");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
     }
 
 }

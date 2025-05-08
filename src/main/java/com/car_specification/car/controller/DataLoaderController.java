@@ -6,7 +6,6 @@ import com.car_specification.car.dto.ContactUsDTO;
 import com.car_specification.car.dto.EventRegisterDTO;
 import com.car_specification.car.dto.EventsDTO;
 import com.car_specification.car.dto.RoleDTO;
-import com.car_specification.car.dto.UserRegistrationDTO;
 import com.car_specification.car.entity.ApiResponse;
 import com.car_specification.car.exception.ApplicationBusinessException;
 import com.car_specification.car.service.CarBrandService;
@@ -29,9 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -334,17 +331,36 @@ public class DataLoaderController {
         }
     }
 
+//    @GetMapping("/getUsersByEventId/{eventId}")
+//    public ResponseEntity<Map<String, Object>> getUsersByEventId(@PathVariable Long eventId) {
+//        // Get the list of registered users for the event
+//        List<UserRegistrationDTO> users = userDetailsService.getUsersByEventId(eventId);
+//
+//        // Prepare the response
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("data", users);  // Add users list to the response body
+//
+//        return ResponseEntity.ok(response);  // Return the response with status 200 OK
+//    }
+
+
     @GetMapping("/getUsersByEventId/{eventId}")
-    public ResponseEntity<Map<String, Object>> getUsersByEventId(@PathVariable Long eventId) {
-        // Get the list of registered users for the event
-        List<UserRegistrationDTO> users = userDetailsService.getUsersByEventId(eventId);
+    public ResponseEntity<ApiResponse<List<EventRegisterDTO>>> getUsersByEvent(@PathVariable Long eventId) {
+        ApiResponse<List<EventRegisterDTO>> response = new ApiResponse<>();
+        List<EventRegisterDTO> registeredUsers = eventRegisterServices.getRegisteredUsersByEventId(eventId);
 
-        // Prepare the response
-        Map<String, Object> response = new HashMap<>();
-        response.put("data", users);  // Add users list to the response body
-
-        return ResponseEntity.ok(response);  // Return the response with status 200 OK
+        if (registeredUsers != null && !registeredUsers.isEmpty()) {
+            response.setStatus(200);
+            response.setMessage("Users fetched successfully");
+            response.setData(registeredUsers);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            response.setStatus(404);
+            response.setMessage("No users found for this event");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
     }
+
 
 
 
@@ -359,4 +375,6 @@ public class DataLoaderController {
     public ResponseEntity<List<ContactUsDTO>> getAllContacts() {
         return ResponseEntity.ok(contactUsService.getAllContacts());
     }
+
+
 }

@@ -130,21 +130,5 @@ public class UserDetailsService {
     }
 
 
-
-
-    // Method to check if user is registered for the event
-//    public boolean checkUserRegistration(Integer userId, Long eventId) {
-//        Optional<User> userOptional = userRepository.findById(userId);
-//
-//        if (userOptional.isPresent()) {
-//            User user = userOptional.get();
-//            return user.getEvents().stream()
-//                    .anyMatch(event -> event.getEventId().equals(eventId));  // Check if eventId is associated with the user
-//        }
-//
-//        return false;  // User not found or not registered for event
-//    }
-
-
 }
 
